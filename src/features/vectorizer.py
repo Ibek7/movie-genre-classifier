@@ -1,11 +1,14 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
-from typing import Tuple
+from typing import Tuple, Optional, List, Union
 
 def fit_vectorizer(
     plots: pd.Series,
-    max_features: int = 5000,
-    ngram_range: Tuple[int, int] = (1, 2)
+    max_features: int = 3000,
+    ngram_range: Tuple[int, int] = (1, 1),
+    max_df: float = 0.95,
+    min_df: int = 15,
+    stop_words: Optional[Union[str, List[str]]] = 'english'
 ) -> TfidfVectorizer:
     """
     Fit a TF-IDF vectorizer on the given plot texts.

@@ -1,0 +1,14 @@
+Metadata-Version: 2.4
+Name: movie_genre_classifier
+Version: 0.1.0
+Summary: A TF-IDF + ML pipeline to classify movie plots by genre
+Author: Bekam Guta
+Requires-Python: >=3.8
+Requires-Dist: pandas
+Requires-Dist: scikit-learn
+Requires-Dist: spacy
+Requires-Dist: joblib
+Dynamic: author
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
