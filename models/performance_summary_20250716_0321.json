@@ -1,0 +1,36 @@
+{
+  "timestamp": "20250716_0321",
+  "experiment_config": {
+    "max_features": 5000,
+    "genre_consolidation_method": "top_15_plus_frequent_100",
+    "min_samples_threshold": 100,
+    "train_test_split": 0.2,
+    "random_state": 42
+  },
+  "data_stats": {
+    "total_samples": 28484,
+    "features_extracted": 5000,
+    "classes_original": 16,
+    "classes_after_consolidation": 16,
+    "train_samples": 22787,
+    "test_samples": 5697
+  },
+  "model_performance": {
+    "naive_bayes": {
+      "accuracy": 0.41723714235562576,
+      "training_time_seconds": 0.09892988204956055,
+      "total_predictions": 5697
+    },
+    "logistic_regression": {
+      "accuracy": 0.45954010882920837,
+      "training_time_seconds": 5.242264032363892,
+      "total_predictions": 5697
+    }
+  },
+  "optimization_results": {
+    "speed_improvement": "Significant - training reduced from minutes to seconds",
+    "feature_reduction": "From ~100k potential to 5000 actual features",
+    "class_reduction": "From 2,227 to 16 classes",
+    "memory_efficiency": "Improved through sparse matrix operations"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "timestamp": "20250716_0353",
+  "experiment_config": {
+    "max_features": 5000,
+    "min_genre_samples": 100,
+    "test_size": 0.2,
+    "random_state": 42
+  },
+  "data_stats": {
+    "total_samples": 28484,
+    "features_extracted": 5000,
+    "classes_after_consolidation": 16,
+    "train_samples": 22787,
+    "test_samples": 5697
+  },
+  "model_performance": {
+    "naive_bayes": {
+      "accuracy": 0.41723714235562576,
+      "training_time_seconds": 0.1385200023651123
+    },
+    "logistic_regression": {
+      "accuracy": 0.4598911707916447,
+      "training_time_seconds": 9.295750856399536,
+      "iterations": 135
+    }
+  },
+  "production_ready": true,
+  "recommended_model": "logistic_regression"
+}
