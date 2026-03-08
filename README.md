@@ -64,16 +64,11 @@ pip install -r requirements.txt
 ### Production Pipeline
 ```bash
 # Run optimized training pipeline
-python -c "
-from src.models.train import train_and_save_models
-train_and_save_models(
-    data_path='data/processed/cleaned_plots.csv',
-    vec_path='models/production_vectorizer.joblib',
-    model_paths={'nb': 'models/nb.joblib', 'lr': 'models/lr.joblib'},
-    max_features=5000,
-    min_genre_samples=100
-)
-"
+python -m src.main \
+    --data-path data/processed/cleaned_plots.csv \
+    --vectorizer-path models/production_vectorizer.joblib \
+    --nb-model-path models/nb.joblib \
+    --lr-model-path models/lr.joblib
 ```
 
 ### Quick Prediction
