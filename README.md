@@ -85,4 +85,20 @@ genre = model.predict(vectorizer.transform([plot]))[0]
 print(f"Predicted genre: {genre}")
 ```
 
+### CLI Prediction
+```bash
+# Predict for one or more raw plot strings
+python -m src.models.predict text \
+    --plots "A detective investigates a murder" "A family survives a haunted house" \
+    --vectorizer models/production_vectorizer.joblib \
+    --model models/lr.joblib
+
+# Predict for all rows in a CSV with a Plot column
+python -m src.models.predict csv \
+    --input-csv data/processed/cleaned_plots.csv \
+    --output-csv data/processed/predictions.csv \
+    --vectorizer models/production_vectorizer.joblib \
+    --model models/lr.joblib
+```
+
 ---
