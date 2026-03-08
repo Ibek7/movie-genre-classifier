@@ -56,7 +56,7 @@ def train_and_save_models(
 
     # Diagnostics
     print("Checking for NaNs:", X_train.isnull().sum())
-    print("Sample plots:", X_train.sample(5))
+    print("Sample plots:", X_train.sample(min(5, len(X_train))))
     print("Type of first plot:", type(X_train.iloc[0]))
     print("Average plot length:", X_train.str.len().describe())
 
