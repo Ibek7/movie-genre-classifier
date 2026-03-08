@@ -82,6 +82,7 @@ def train_and_save_models(
     nb.fit(X_tr, y_train)
     nb_time = time.time() - start_time
     print(f"Naive Bayes training time: {nb_time:.2f} seconds")
+    Path(model_paths["nb"]).parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(nb, model_paths["nb"])
     
     print("\nTraining Logistic Regression...")
@@ -97,6 +98,7 @@ def train_and_save_models(
     lr_time = time.time() - start_time
     print(f"Logistic Regression training time: {lr_time:.2f} seconds")
     print(f"Completed iterations: {lr.n_iter_}")
+    Path(model_paths["lr"]).parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(lr, model_paths["lr"])
     
     # 6) Evaluate models on test set
