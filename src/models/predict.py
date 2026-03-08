@@ -34,6 +34,14 @@ def predict(
     - Vectorizes using the saved TF-IDF
     - Runs model.predict
     """
+    if not plots:
+        raise ValueError("plots must contain at least one plot summary")
+
+    if not Path(vec_path).exists():
+        raise FileNotFoundError(f"Vectorizer not found: {vec_path}")
+    if not Path(model_path).exists():
+        raise FileNotFoundError(f"Model not found: {model_path}")
+
     vec = load_vectorizer(vec_path)
     model = load_model(model_path)
 
@@ -65,7 +73,11 @@ def predict_from_csv(
     df = pd.read_csv(input_csv)
     if "Plot" not in df:
         raise ValueError("Input CSV must contain a 'Plot' column")
-    df["Predicted_Genre"] = predict(df["Plot"].tolist(), vec_path, model_path)
+    if df.empty:
+        raise ValueError("Input CSV is empty")
+
+    plots = df["Plot"].fillna("").astype(str).tolist()
+    df["Predicted_Genre"] = predict(plots, vec_path, model_path)
     df.to_csv(output_csv, index=False)
     print(f"Predictions saved to {output_csv}")
 
