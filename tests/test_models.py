@@ -15,7 +15,7 @@ def test_train_and_save(tmp_path):
     nb_file = tmp_path / "nb.joblib"
     lr_file = tmp_path / "lr.joblib"
     
-    X_test, y_test = train_and_save_models(
+    X_test, y_test, summary = train_and_save_models(
         str(data_file),
         str(vec_file),
         {"nb": str(nb_file), "lr": str(lr_file)},
@@ -28,3 +28,4 @@ def test_train_and_save(tmp_path):
     assert os.path.exists(nb_file)
     assert os.path.exists(lr_file)
     assert len(X_test) == len(y_test) == 1
+    assert "recommended_model" in summary
