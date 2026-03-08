@@ -5,3 +5,6 @@ __pycache__/
 *.joblib
 *.png
 data/raw/
+.DS_Store
+models/performance_summary_*.json
+models/evaluation_summary_*.json
