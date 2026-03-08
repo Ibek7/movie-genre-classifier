@@ -6,6 +6,7 @@ from datetime import datetime
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.linear_model import LogisticRegression
+from sklearn.dummy import DummyClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score, classification_report
 import joblib
@@ -87,17 +88,25 @@ def train_and_save_models(
     
     print("\nTraining Logistic Regression...")
     start_time = time.time()
-    # Simplified working configuration (matches notebook results)
-    lr = LogisticRegression(
-        max_iter=500,               # Sufficient for convergence
-        random_state=random_state,
-        C=1.0                       # Default regularization
-    )
-    
-    lr.fit(X_tr, y_train)
+    if y_train.nunique() < 2:
+        single_class = y_train.iloc[0]
+        print(
+            "Only one class in training data after consolidation; "
+            "using constant fallback classifier."
+        )
+        lr = DummyClassifier(strategy="constant", constant=single_class)
+        lr.fit(X_tr, y_train)
+    else:
+        lr = LogisticRegression(
+            max_iter=500,
+            random_state=random_state,
+            C=1.0
+        )
+        lr.fit(X_tr, y_train)
+        print(f"Completed iterations: {lr.n_iter_}")
+
     lr_time = time.time() - start_time
     print(f"Logistic Regression training time: {lr_time:.2f} seconds")
-    print(f"Completed iterations: {lr.n_iter_}")
     Path(model_paths["lr"]).parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(lr, model_paths["lr"])
     
