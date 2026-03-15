@@ -10,16 +10,17 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score
 import joblib
 from pathlib import Path
+from typing import Any
 
 def train_and_save_models(
     data_path: str,
     vec_path: str,
-    model_paths: dict,
+    model_paths: dict[str, str],
     test_size: float = 0.2,
     random_state: int = 42,
     max_features: int = 5000,  # Add feature limit parameter
     min_genre_samples: int = 100  # Add genre consolidation parameter
-):
+) -> tuple[Any, pd.Series, dict[str, Any]]:
     # 1) Load data
     df = pd.read_csv(data_path)
     plots = df["Plot"]
