@@ -16,5 +16,11 @@ setup(
         "joblib",
         # etc…
     ],
+    entry_points={
+        "console_scripts": [
+            "mgc-train=src.main:main",
+            "mgc-predict=src.models.predict:main",
+        ]
+    },
     python_requires=">=3.8",
 )
