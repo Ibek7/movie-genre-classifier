@@ -1,5 +1,4 @@
 import time
-import psutil
 import pandas as pd
 import json
 from datetime import datetime
@@ -8,7 +7,7 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.dummy import DummyClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score
 import joblib
 from pathlib import Path
 
