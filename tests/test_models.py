@@ -27,7 +27,7 @@ def test_train_and_save(tmp_path):
     assert os.path.exists(vec_file)
     assert os.path.exists(nb_file)
     assert os.path.exists(lr_file)
-    assert len(X_test) == len(y_test) == 1
+    assert X_test.shape[0] == len(y_test) == 1
     assert "recommended_model" in summary
 
 
