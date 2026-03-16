@@ -11,3 +11,22 @@ def test_vectorizer_shapes():
     # Expect 2 rows and ≤ 10 columns
     assert matrix.shape[0] == 2
     assert matrix.shape[1] <= 10
+
+
+def test_vectorizer_respects_stop_words_and_ngrams():
+    sample = pd.Series([
+        "the quick brown fox",
+        "the quick blue fox"
+    ])
+
+    vec = fit_vectorizer(
+        sample,
+        max_features=50,
+        ngram_range=(1, 2),
+        min_df=1,
+        stop_words="english",
+    )
+
+    vocab = set(vec.get_feature_names_out())
+    assert "the" not in vocab
+    assert "quick brown" in vocab or "quick blue" in vocab
