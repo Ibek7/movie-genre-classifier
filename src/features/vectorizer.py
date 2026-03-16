@@ -17,6 +17,9 @@ def fit_vectorizer(
     vectorizer = TfidfVectorizer(
         max_features=max_features,
         ngram_range=ngram_range,
+        max_df=max_df,
+        min_df=min_df,
+        stop_words=stop_words,
         token_pattern=r"(?u)\b\w+\b"
     )
     vectorizer.fit(plots)
