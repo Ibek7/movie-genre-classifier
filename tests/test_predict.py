@@ -17,6 +17,14 @@ def test_predict_rejects_missing_vectorizer(tmp_path):
         predict(["A plot"], tmp_path / "vec.joblib", model_path)
 
 
+def test_predict_rejects_missing_model(tmp_path):
+    vec_path = tmp_path / "vec.joblib"
+    vec_path.write_text("placeholder")
+
+    with pytest.raises(FileNotFoundError, match="Model not found"):
+        predict(["A plot"], vec_path, tmp_path / "model.joblib")
+
+
 def test_predict_from_csv_rejects_empty_input(tmp_path):
     input_csv = tmp_path / "empty.csv"
     output_csv = tmp_path / "out.csv"
