@@ -3,8 +3,8 @@ import joblib
 from typing import List, Union
 from pathlib import Path
 
-from preprocessing.cleaner import normalize_text
-from features.vectorizer import transform_plots
+from src.preprocessing.cleaner import normalize_text
+from src.features.vectorizer import transform_plots
 import pandas as pd
 
 
