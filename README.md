@@ -101,4 +101,14 @@ python -m src.models.predict csv \
     --model models/lr.joblib
 ```
 
+### Installed CLI Commands
+After installing the package (e.g., `pip install -e .`), you can use:
+
+```bash
+mgc-train --data-path data/processed/cleaned_plots.csv
+mgc-predict text --plots "A detective investigates a murder" \
+    --vectorizer models/production_vectorizer.joblib \
+    --model models/lr.joblib
+```
+
 ---
