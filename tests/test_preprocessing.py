@@ -28,3 +28,11 @@ def test_drop_missing(tmp_path):
 def test_tokenize_basic():
     tokens = tokenize("The QUICK brown fox.")
     assert "quick" in tokens and "fox" in tokens and "the" not in tokens
+
+
+def test_normalize_text_handles_none():
+    assert normalize_text(None) == ""
+
+
+def test_normalize_text_handles_non_string():
+    assert normalize_text(12345) == "12345"
