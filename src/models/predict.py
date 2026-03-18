@@ -70,6 +70,9 @@ def predict_from_csv(
     Read `input_csv` (must have a 'Plot' column), predict genres,
     and write a new CSV with an added 'Predicted_Genre' column.
     """
+    if not Path(input_csv).exists():
+        raise FileNotFoundError(f"Input CSV not found: {input_csv}")
+
     df = pd.read_csv(input_csv)
     if "Plot" not in df:
         raise ValueError("Input CSV must contain a 'Plot' column")
@@ -78,6 +81,7 @@ def predict_from_csv(
 
     plots = df["Plot"].fillna("").astype(str).tolist()
     df["Predicted_Genre"] = predict(plots, vec_path, model_path)
+    Path(output_csv).parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(output_csv, index=False)
     print(f"Predictions saved to {output_csv}")
 
