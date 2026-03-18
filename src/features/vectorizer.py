@@ -14,11 +14,13 @@ def fit_vectorizer(
     Fit a TF-IDF vectorizer on the given plot texts.
     Returns the fitted vectorizer.
     """
+    adjusted_min_df = min(min_df, max(1, len(plots) - 1))
+
     vectorizer = TfidfVectorizer(
         max_features=max_features,
         ngram_range=ngram_range,
         max_df=max_df,
-        min_df=min_df,
+        min_df=adjusted_min_df,
         stop_words=stop_words,
         token_pattern=r"(?u)\b\w+\b"
     )
