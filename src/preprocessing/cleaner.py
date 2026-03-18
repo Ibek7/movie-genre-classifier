@@ -32,6 +32,11 @@ def normalize_text(text: str) -> str:
     """
     Normalize text by lowercasing, removing HTML tags, non-alphanumeric chars, and collapsing whitespace.
     """
+    if text is None:
+        return ""
+    if not isinstance(text, str):
+        text = str(text)
+
     text = text.lower()
     text = re.sub(r"<[^>]+>", " ", text)            # strip HTML tags
     text = re.sub(r"[^a-z0-9\s\|]", " ", text)    # keep letters/numbers/pipes
