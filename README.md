@@ -111,4 +111,14 @@ mgc-predict text --plots "A detective investigates a murder" \
     --model models/lr.joblib
 ```
 
+## How to Run Tests
+
+```bash
+# Run all tests
+pytest -q
+
+# Run focused test modules
+pytest -q tests/test_models.py tests/test_vectorization.py tests/test_predict.py
+```
+
 ---
