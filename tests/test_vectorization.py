@@ -30,3 +30,16 @@ def test_vectorizer_respects_stop_words_and_ngrams():
     vocab = set(vec.get_feature_names_out())
     assert "the" not in vocab
     assert "quick brown" in vocab or "quick blue" in vocab
+
+
+def test_vectorizer_defaults_work_on_tiny_corpus():
+    sample = pd.Series([
+        "alpha beta",
+        "beta gamma"
+    ])
+
+    vec = fit_vectorizer(sample)
+    matrix = transform_plots(vec, sample)
+
+    assert matrix.shape[0] == 2
+    assert matrix.shape[1] > 0
