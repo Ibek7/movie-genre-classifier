@@ -155,7 +155,7 @@ def train_and_save_models(
     
     # Save performance summary
     summary_path = Path(vec_path).parent / f"performance_summary_{timestamp}.json"
-    with open(summary_path, 'w') as f:
+    with open(summary_path, 'w', encoding='utf-8') as f:
         json.dump(performance_summary, f, indent=2)
     
     print(f"\n💾 Performance summary saved to: {summary_path}")
