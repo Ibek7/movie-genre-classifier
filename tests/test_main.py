@@ -1,4 +1,5 @@
 from src.main import build_parser
+import pytest
 
 
 def test_build_parser_defaults():
@@ -26,3 +27,9 @@ def test_build_parser_custom_values():
     assert args.data_path == "custom.csv"
     assert args.max_features == 2500
     assert args.min_genre_samples == 10
+
+
+def test_build_parser_rejects_non_positive_max_features():
+    parser = build_parser()
+    with pytest.raises(SystemExit):
+        parser.parse_args(["--max-features", "0"])
