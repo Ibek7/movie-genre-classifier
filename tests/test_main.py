@@ -33,3 +33,9 @@ def test_build_parser_rejects_non_positive_max_features():
     parser = build_parser()
     with pytest.raises(SystemExit):
         parser.parse_args(["--max-features", "0"])
+
+
+def test_build_parser_rejects_test_size_out_of_range():
+    parser = build_parser()
+    with pytest.raises(SystemExit):
+        parser.parse_args(["--test-size", "1.2"])
