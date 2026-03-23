@@ -3,6 +3,13 @@ import argparse
 from src.models.train import train_and_save_models
 
 
+def positive_int(value: str) -> int:
+    parsed = int(value)
+    if parsed <= 0:
+        raise argparse.ArgumentTypeError("value must be a positive integer")
+    return parsed
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Train movie genre classification models")
     parser.add_argument("--data-path", default="data/processed/cleaned_plots.csv")
@@ -11,8 +18,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--lr-model-path", default="models/lr.joblib")
     parser.add_argument("--test-size", type=float, default=0.2)
     parser.add_argument("--random-state", type=int, default=42)
-    parser.add_argument("--max-features", type=int, default=5000)
-    parser.add_argument("--min-genre-samples", type=int, default=100)
+    parser.add_argument("--max-features", type=positive_int, default=5000)
+    parser.add_argument("--min-genre-samples", type=positive_int, default=100)
     return parser
 
 
