@@ -1,6 +1,7 @@
 
 import pandas as pd
 import re
+from pathlib import Path
 
 
 def load_data(input_path: str) -> pd.DataFrame:
@@ -59,4 +60,5 @@ def clean_and_save(input_path: str, output_path: str) -> None:
     df = drop_duplicates(df)
     df = drop_missing(df)
     df["Plot"] = df["Plot"].apply(normalize_text)
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(output_path, index=False)
