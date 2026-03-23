@@ -1,5 +1,5 @@
 import pandas as pd
-from src.preprocessing.cleaner import normalize_text, drop_duplicates, drop_missing
+from src.preprocessing.cleaner import normalize_text, drop_duplicates, drop_missing, clean_and_save
 from src.preprocessing.tokenizer import tokenize
 
 def test_normalize_text():
@@ -36,3 +36,20 @@ def test_normalize_text_handles_none():
 
 def test_normalize_text_handles_non_string():
     assert normalize_text(12345) == "12345"
+
+
+def test_clean_and_save_creates_output_directory(tmp_path):
+    input_csv = tmp_path / "input.csv"
+    output_csv = tmp_path / "nested" / "processed" / "cleaned.csv"
+
+    pd.DataFrame(
+        {
+            "Title": ["A"],
+            "Plot": ["<p>Hello</p>"],
+            "Genre": ["Drama"],
+        }
+    ).to_csv(input_csv, index=False)
+
+    clean_and_save(str(input_csv), str(output_csv))
+
+    assert output_csv.exists()
