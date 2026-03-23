@@ -111,6 +111,11 @@ mgc-predict text --plots "A detective investigates a murder" \
     --model models/lr.joblib
 ```
 
+Notes:
+- `--test-size` must be between `0` and `1` (exclusive).
+- `--max-features` and `--min-genre-samples` must be positive integers.
+- Prediction input must include at least one non-empty plot summary.
+
 ## How to Run Tests
 
 ```bash
