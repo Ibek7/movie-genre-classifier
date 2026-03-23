@@ -46,6 +46,9 @@ def predict(
     model = load_model(model_path)
 
     cleaned = preprocess_plots(plots)
+    if not any(cleaned):
+        raise ValueError("plots must contain at least one non-empty summary")
+
     X = transform_plots(vec, pd.Series(cleaned))
     return model.predict(X).tolist()
 
