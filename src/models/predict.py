@@ -37,6 +37,10 @@ def predict(
     if not plots:
         raise ValueError("plots must contain at least one plot summary")
 
+    cleaned = preprocess_plots(plots)
+    if not any(cleaned):
+        raise ValueError("plots must contain at least one non-empty summary")
+
     if not Path(vec_path).exists():
         raise FileNotFoundError(f"Vectorizer not found: {vec_path}")
     if not Path(model_path).exists():
@@ -44,10 +48,6 @@ def predict(
 
     vec = load_vectorizer(vec_path)
     model = load_model(model_path)
-
-    cleaned = preprocess_plots(plots)
-    if not any(cleaned):
-        raise ValueError("plots must contain at least one non-empty summary")
 
     X = transform_plots(vec, pd.Series(cleaned))
     return model.predict(X).tolist()

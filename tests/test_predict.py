@@ -9,9 +9,14 @@ def test_predict_rejects_empty_plot_list():
         predict([], "missing_vec.joblib", "missing_model.joblib")
 
 
-def test_predict_rejects_all_empty_normalized_plots():
+def test_predict_rejects_all_empty_normalized_plots(tmp_path):
+    vec_path = tmp_path / "vec.joblib"
+    model_path = tmp_path / "model.joblib"
+    vec_path.write_text("placeholder")
+    model_path.write_text("placeholder")
+
     with pytest.raises(ValueError, match="at least one non-empty summary"):
-        predict(["   ", "\n\t"], "missing_vec.joblib", "missing_model.joblib")
+        predict(["   ", "\n\t"], vec_path, model_path)
 
 
 def test_predict_rejects_missing_vectorizer(tmp_path):
