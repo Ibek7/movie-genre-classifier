@@ -1,6 +1,19 @@
+"""TF-IDF feature-engineering utilities.
+
+Wraps scikit-learn's :class:`~sklearn.feature_extraction.text.TfidfVectorizer`
+with project-specific defaults tuned during notebook experiments.
+
+Public API
+----------
+fit_vectorizer : Fit a new vectorizer on a corpus of plot strings.
+transform_plots : Transform plot strings using a fitted vectorizer.
+"""
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pandas as pd
 from typing import Tuple, Optional, List, Union
+
+__all__ = ["fit_vectorizer", "transform_plots"]
 
 def fit_vectorizer(
     plots: pd.Series,
