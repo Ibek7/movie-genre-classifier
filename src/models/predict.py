@@ -1,3 +1,14 @@
+"""Inference utilities for movie-genre classification.
+
+Exposes three public helpers:
+
+* :func:`predict` — batch predictions from raw plot strings.
+* :func:`predict_genre` — convenience wrapper for a single plot.
+* :func:`predict_from_csv` — read a CSV, predict, and write results back.
+
+A CLI entry-point (``mgc-predict``) is also provided via :func:`main`.
+"""
+
 import argparse
 import joblib
 from typing import List, Union
