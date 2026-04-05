@@ -1,3 +1,9 @@
+"""Text-cleaning utilities for raw movie plot data.
+
+Provides functions to load, deduplicate, prune, normalize, and persist
+the cleaned dataset.  The main entry-point for a full run is
+:func:`clean_and_save`.
+"""
 
 import pandas as pd
 import re
