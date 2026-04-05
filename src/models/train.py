@@ -1,3 +1,10 @@
+"""Training pipeline for movie-genre classification models.
+
+Loads a cleaned CSV, consolidates rare genres, fits a TF-IDF vectorizer,
+trains Naive Bayes and Logistic Regression classifiers, evaluates them on a
+held-out test set, and persists all artefacts to disk.
+"""
+
 import time
 import pandas as pd
 import json
