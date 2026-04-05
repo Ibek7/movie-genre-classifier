@@ -19,14 +19,14 @@ def proportion(value: str) -> float:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Train movie genre classification models")
-    parser.add_argument("--data-path", default="data/processed/cleaned_plots.csv")
-    parser.add_argument("--vectorizer-path", default="models/production_vectorizer.joblib")
-    parser.add_argument("--nb-model-path", default="models/nb.joblib")
-    parser.add_argument("--lr-model-path", default="models/lr.joblib")
-    parser.add_argument("--test-size", type=proportion, default=0.2)
-    parser.add_argument("--random-state", type=int, default=42)
-    parser.add_argument("--max-features", type=positive_int, default=5000)
-    parser.add_argument("--min-genre-samples", type=positive_int, default=100)
+    parser.add_argument("--data-path", default="data/processed/cleaned_plots.csv", help="Path to cleaned training CSV")
+    parser.add_argument("--vectorizer-path", default="models/production_vectorizer.joblib", help="Output path for fitted vectorizer")
+    parser.add_argument("--nb-model-path", default="models/nb.joblib", help="Output path for Naive Bayes model")
+    parser.add_argument("--lr-model-path", default="models/lr.joblib", help="Output path for Logistic Regression model")
+    parser.add_argument("--test-size", type=proportion, default=0.2, help="Test split ratio in range (0, 1)")
+    parser.add_argument("--random-state", type=int, default=42, help="Random seed for deterministic splits")
+    parser.add_argument("--max-features", type=positive_int, default=5000, help="Maximum TF-IDF feature count")
+    parser.add_argument("--min-genre-samples", type=positive_int, default=100, help="Minimum samples required to keep a genre")
     return parser
 
 
