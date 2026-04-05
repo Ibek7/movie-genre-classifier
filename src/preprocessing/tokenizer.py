@@ -1,3 +1,9 @@
+"""spaCy-based tokenization utilities for movie plot summaries.
+
+Uses the ``en_core_web_sm`` model to lemmatize and optionally filter
+stop-words from cleaned plot text produced by :mod:`src.preprocessing.cleaner`.
+"""
+
 import spacy
 from spacy.lang.en.stop_words import STOP_WORDS
 
