@@ -74,6 +74,60 @@ def predict_genre(
     return predict([plot], vec_path, model_path)[0]
 
 
+def predict_proba(
+    plots: List[str],
+    vec_path: Union[str, Path],
+    model_path: Union[str, Path],
+) -> List[dict]:
+    """Return per-class probabilities for each plot in *plots*.
+
+    Requires the loaded model to expose ``predict_proba``
+    (e.g. :class:`~sklearn.linear_model.LogisticRegression`).
+    Multinomial Naive Bayes also supports this; plain SVMs do not.
+
+    Parameters
+    ----------
+    plots:
+        Raw plot strings to classify.
+    vec_path:
+        Path to the saved TF-IDF vectorizer.
+    model_path:
+        Path to the saved trained model.
+
+    Returns
+    -------
+    list[dict]
+        One dict per plot mapping class label → probability (float).
+
+    Raises
+    ------
+    AttributeError
+        If the model does not support ``predict_proba``.
+    """
+    if not plots:
+        raise ValueError("plots must contain at least one plot summary")
+
+    cleaned = preprocess_plots(plots)
+    if not Path(vec_path).exists():
+        raise FileNotFoundError(f"Vectorizer not found: {vec_path}")
+    if not Path(model_path).exists():
+        raise FileNotFoundError(f"Model not found: {model_path}")
+
+    vec = load_vectorizer(vec_path)
+    model = load_model(model_path)
+
+    if not hasattr(model, "predict_proba"):
+        raise AttributeError(
+            f"{type(model).__name__} does not support predict_proba. "
+            "Use a probabilistic model such as LogisticRegression or MultinomialNB."
+        )
+
+    X = transform_plots(vec, pd.Series(cleaned))
+    proba_matrix = model.predict_proba(X)
+    classes = list(model.classes_)
+    return [dict(zip(classes, row.tolist())) for row in proba_matrix]
+
+
 def predict_from_csv(
     input_csv: Union[str, Path],
     output_csv: Union[str, Path],
