@@ -1,6 +1,6 @@
 import pandas as pd
 from src.preprocessing.cleaner import normalize_text, drop_duplicates, drop_missing, clean_and_save
-from src.preprocessing.tokenizer import tokenize
+from src.preprocessing.tokenizer import tokenize, tokenize_batch
 
 def test_normalize_text():
     raw = "<p>Hello, WORLD!!!</p>\nNew   line."
@@ -53,3 +53,40 @@ def test_clean_and_save_creates_output_directory(tmp_path):
     clean_and_save(str(input_csv), str(output_csv))
 
     assert output_csv.exists()
+
+
+# ---------------------------------------------------------------------------
+# tokenize_batch tests
+# ---------------------------------------------------------------------------
+
+def test_tokenize_batch_returns_one_list_per_input():
+    texts = ["The quick brown fox", "A brave new world"]
+    result = tokenize_batch(texts)
+    assert len(result) == 2
+    assert isinstance(result[0], list)
+    assert isinstance(result[1], list)
+
+
+def test_tokenize_batch_removes_stop_words_by_default():
+    result = tokenize_batch(["The QUICK brown fox"])
+    tokens = result[0]
+    assert "the" not in tokens
+    assert "quick" in tokens
+
+
+def test_tokenize_batch_keeps_stop_words_when_disabled():
+    result = tokenize_batch(["The quick brown fox"], remove_stopwords=False)
+    tokens = result[0]
+    assert "the" in tokens
+
+
+def test_tokenize_batch_empty_corpus_returns_empty_list():
+    assert tokenize_batch([]) == []
+
+
+def test_tokenize_batch_order_matches_input():
+    texts = ["action hero", "romantic comedy drama"]
+    result = tokenize_batch(texts)
+    # 'action' appears in first doc, not second
+    assert any("action" in t for t in result[0])
+    assert all("action" not in t for t in result[1])
