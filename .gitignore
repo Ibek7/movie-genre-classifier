@@ -1,16 +1,52 @@
+# ── Virtual environments ──────────────────────────────────────────────────
 .venv/
+venv/
+env/
+
+# ── Python bytecode & caches ──────────────────────────────────────────────
 __pycache__/
 *.py[cod]
+*.pyo
+
+# ── Jupyter ───────────────────────────────────────────────────────────────
 .ipynb_checkpoints/
+*.nbconvert/
+
+# ── Test / linting caches ─────────────────────────────────────────────────
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 .pyright/
 .coverage
 htmlcov/
+
+# ── Model artefacts ───────────────────────────────────────────────────────
 *.joblib
-*.png
-data/raw/
-.DS_Store
 models/performance_summary_*.json
 models/evaluation_summary_*.json
+
+# ── Data (raw is large; processed also excluded by default) ───────────────
+data/raw/
+data/processed/
+
+# ── Build / packaging ─────────────────────────────────────────────────────
+dist/
+build/
+*.egg-info/
+*.egg
+MANIFEST
+pip-wheel-metadata/
+
+# ── OS generated files ────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Images / media ────────────────────────────────────────────────────────
+*.png
+*.jpg
+*.jpeg
+*.svg
+
+# ── IDE / editor settings ─────────────────────────────────────────────────
+.vscode/settings.json
+.idea/
