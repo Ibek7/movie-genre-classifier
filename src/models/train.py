@@ -25,9 +25,37 @@ def train_and_save_models(
     model_paths: dict[str, str],
     test_size: float = 0.2,
     random_state: int = 42,
-    max_features: int = 5000,  # Add feature limit parameter
-    min_genre_samples: int = 100  # Add genre consolidation parameter
+    max_features: int = 5000,
+    min_genre_samples: int = 100,
 ) -> tuple[Any, pd.Series, dict[str, Any]]:
+    """Train NB and LR classifiers and persist all artefacts to disk.
+
+    Parameters
+    ----------
+    data_path:
+        Path to the cleaned CSV produced by :func:`src.preprocessing.cleaner.clean_and_save`.
+    vec_path:
+        Destination path for the fitted TF-IDF vectorizer (``.joblib``).
+    model_paths:
+        Mapping of ``{"nb": <path>, "lr": <path>}`` for the two model files.
+    test_size:
+        Fraction of data held out for evaluation (must be in ``(0, 1)``).
+    random_state:
+        Seed used for the train/test split to ensure reproducibility.
+    max_features:
+        Maximum vocabulary size passed to :class:`~sklearn.feature_extraction.text.TfidfVectorizer`.
+    min_genre_samples:
+        Genres with fewer than this many samples are merged into ``"other"``.
+
+    Returns
+    -------
+    X_test : scipy sparse matrix
+        TF-IDF feature matrix for the test split.
+    y_test : pandas.Series
+        True genre labels for the test split.
+    performance_summary : dict
+        Nested dict with experiment config, data stats, and per-model metrics.
+    """
     # 1) Load data
     df = pd.read_csv(data_path)
     plots = df["Plot"]
