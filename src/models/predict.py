@@ -1,10 +1,12 @@
 """Inference utilities for movie-genre classification.
 
-Exposes three public helpers:
+Exposes four public helpers:
 
 * :func:`predict` — batch predictions from raw plot strings.
 * :func:`predict_genre` — convenience wrapper for a single plot.
+* :func:`predict_proba` — per-class probability scores for a batch.
 * :func:`predict_from_csv` — read a CSV, predict, and write results back.
+* :func:`batch_predict_from_dir` — run CSV inference on an entire directory.
 
 A CLI entry-point (``mgc-predict``) is also provided via :func:`main`.
 """
@@ -152,6 +154,60 @@ def predict_from_csv(
     Path(output_csv).parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(output_csv, index=False)
     print(f"Predictions saved to {output_csv}")
+
+
+def batch_predict_from_dir(
+    input_dir: Union[str, Path],
+    output_dir: Union[str, Path],
+    vec_path: Union[str, Path],
+    model_path: Union[str, Path],
+    glob: str = "*.csv",
+) -> List[Path]:
+    """Run :func:`predict_from_csv` on every CSV in *input_dir*.
+
+    This is useful for processing a folder of new movie batches without
+    manually looping over files.
+
+    Parameters
+    ----------
+    input_dir:
+        Directory containing one or more CSV files with a ``Plot`` column.
+    output_dir:
+        Directory where annotated output CSVs will be written.
+        Each output file has the same name as its input file.
+    vec_path:
+        Path to the fitted TF-IDF vectorizer.
+    model_path:
+        Path to the trained model.
+    glob:
+        File pattern used to discover CSVs inside *input_dir* (default ``*.csv``).
+
+    Returns
+    -------
+    list[pathlib.Path]
+        Paths of the output CSV files that were written.
+
+    Raises
+    ------
+    FileNotFoundError
+        If *input_dir* does not exist.
+    """
+    input_dir = Path(input_dir)
+    output_dir = Path(output_dir)
+
+    if not input_dir.exists():
+        raise FileNotFoundError(f"Input directory not found: {input_dir}")
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    written: List[Path] = []
+
+    for csv_file in sorted(input_dir.glob(glob)):
+        out_file = output_dir / csv_file.name
+        predict_from_csv(csv_file, out_file, vec_path, model_path)
+        written.append(out_file)
+
+    print(f"Processed {len(written)} file(s) → {output_dir}")
+    return written
 
 
 def main():
