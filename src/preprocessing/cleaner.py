@@ -98,6 +98,43 @@ def sentence_count(text: str) -> int:
     return max(1, sum(1 for p in parts if p.strip()))
 
 
+def truncate_plot(text: str, max_words: int = 200) -> str:
+    """Truncate *text* to at most *max_words* whitespace-separated tokens.
+
+    Long Wikipedia plot summaries can exceed 1 000 words.  Truncating to a
+    fixed budget keeps memory use predictable and prevents outlier documents
+    from dominating TF-IDF statistics.
+
+    Parameters
+    ----------
+    text:
+        Raw or pre-normalised plot string.
+    max_words:
+        Maximum number of tokens to keep (default 200).  Must be a positive
+        integer; values ≤ 0 raise :class:`ValueError`.
+
+    Returns
+    -------
+    str
+        The (possibly truncated) text.  If *text* has fewer than *max_words*
+        tokens it is returned unchanged.  Non-string or empty input returns
+        an empty string.
+
+    Examples
+    --------
+    >>> truncate_plot("one two three four five", max_words=3)
+    'one two three'
+    >>> truncate_plot("short", max_words=100)
+    'short'
+    """
+    if max_words <= 0:
+        raise ValueError(f"max_words must be a positive integer, got {max_words}")
+    if not text or not isinstance(text, str):
+        return ""
+    tokens = text.split()
+    return " ".join(tokens[:max_words])
+
+
 def clean_and_save(input_path: str, output_path: str) -> None:
     """
     Run full cleaning pipeline and save processed CSV.
