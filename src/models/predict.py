@@ -5,6 +5,8 @@ Exposes four public helpers:
 * :func:`predict` — batch predictions from raw plot strings.
 * :func:`predict_genre` — convenience wrapper for a single plot.
 * :func:`predict_proba` — per-class probability scores for a batch.
+* :func:`predict_with_confidence` — top genre + confidence score per plot.
+* :func:`predict_top_k` — top-k genres with probabilities per plot.
 * :func:`predict_from_csv` — read a CSV, predict, and write results back.
 * :func:`batch_predict_from_dir` — run CSV inference on an entire directory.
 
@@ -167,6 +169,58 @@ def predict_with_confidence(
     for proba in proba_dicts:
         top_genre = max(proba, key=proba.__getitem__)
         results.append({"genre": top_genre, "confidence": round(proba[top_genre], 4)})
+    return results
+
+
+def predict_top_k(
+    plots: List[str],
+    vec_path: Union[str, Path],
+    model_path: Union[str, Path],
+    k: int = 3,
+) -> List[List[dict]]:
+    """Return the top-*k* most likely genres and their probabilities for each plot.
+
+    Useful for building multi-label suggestions or ranking interfaces where the
+    single best guess isn't sufficient.
+
+    Parameters
+    ----------
+    plots:
+        Raw plot strings to classify.
+    vec_path:
+        Path to the saved TF-IDF vectorizer.
+    model_path:
+        Path to the saved trained model (must support ``predict_proba``).
+    k:
+        Number of top genres to return per plot.  Clamped to the number of
+        available classes if *k* exceeds it.
+
+    Returns
+    -------
+    list[list[dict]]
+        One list per plot, each containing up to *k* dicts of
+        ``{"genre": str, "confidence": float}`` sorted by descending confidence.
+
+    Raises
+    ------
+    ValueError
+        If *k* ≤ 0.
+
+    Examples
+    --------
+    >>> top = predict_top_k(["A hero saves the world"], vec, model, k=3)
+    >>> top[0][0]["genre"]  # most likely genre
+    'Action'
+    """
+    if k <= 0:
+        raise ValueError(f"k must be a positive integer, got {k}")
+    proba_dicts = predict_proba(plots, vec_path, model_path)
+    results = []
+    for proba in proba_dicts:
+        ranked = sorted(proba.items(), key=lambda x: x[1], reverse=True)
+        results.append(
+            [{"genre": g, "confidence": round(p, 4)} for g, p in ranked[:k]]
+        )
     return results
 
 
