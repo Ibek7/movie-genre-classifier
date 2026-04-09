@@ -79,11 +79,61 @@ Models are evaluated on the held-out test set using **accuracy**.  A performance
 
 ## 8. Inference (`src/models/predict.py`)
 
-Three public helpers are provided:
+Five public helpers are provided:
 
 | Function | Use-case |
 |----------|----------|
 | `predict(plots, ...)` | Batch list of raw plot strings → genre labels |
 | `predict_genre(plot, ...)` | Single plot → genre label |
 | `predict_proba(plots, ...)` | Batch → per-class probability dicts |
+| `predict_with_confidence(plots, ...)` | Batch → `{genre, confidence}` dicts |
 | `predict_from_csv(...)` | CSV in, CSV out (batch inference) |
+| `batch_predict_from_dir(...)` | Directory of CSVs → annotated CSVs |
+
+---
+
+## 9. Text Statistics (`src/preprocessing/cleaner.py`)
+
+Two lightweight helpers quantify raw plot quality before cleaning:
+
+- **`word_count(text)`** — number of whitespace-separated tokens.
+- **`sentence_count(text)`** — approximate sentence count (split on `.`, `!`, `?`).
+
+These are useful for EDA filtering (e.g. dropping plots with fewer than 20 words) and
+for understanding the correlation between plot length and classification confidence.
+
+---
+
+## 10. Observability
+
+### Structured logging
+`src/models/train.py` uses Python's `logging` module (logger name `src.models.train`).
+Consumers can configure verbosity at import time:
+
+```python
+import logging
+logging.basicConfig(level=logging.INFO)
+```
+
+`INFO` messages report high-level progress (data shape, accuracy scores).
+`DEBUG` messages emit diagnostic details (per-batch NaN checks, plot-length stats).
+
+### Performance summaries
+Every `train_and_save_models` call writes a timestamped JSON to
+`models/performance_summary_<YYYYMMDD_HHMM>.json` containing experiment config,
+data statistics, and per-model metrics.
+
+---
+
+## 11. Constants (`src/constants.py`)
+
+All magic numbers and default filenames are centralised in `src/constants.py`:
+
+| Constant | Default | Purpose |
+|----------|---------|---------|
+| `TOP_GENRES` | 16 labels | Canonical genre list after consolidation |
+| `RARE_GENRE_LABEL` | `"other"` | Fallback class for rare genres |
+| `MIN_GENRE_SAMPLES` | 100 | Minimum class size |
+| `DEFAULT_MAX_FEATURES` | 5 000 | TF-IDF vocabulary cap |
+| `DEFAULT_TEST_SIZE` | 0.2 | Train/test split fraction |
+| `DEFAULT_RANDOM_STATE` | 42 | Reproducibility seed |
