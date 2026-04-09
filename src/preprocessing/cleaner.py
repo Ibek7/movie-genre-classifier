@@ -51,6 +51,53 @@ def normalize_text(text: str) -> str:
     return text
 
 
+def word_count(text: str) -> int:
+    """Return the number of whitespace-separated tokens in *text*.
+
+    Parameters
+    ----------
+    text:
+        Raw or pre-normalised plot string.
+
+    Returns
+    -------
+    int
+        Token count; 0 for empty or non-string input.
+
+    Examples
+    --------
+    >>> word_count("A hero saves the world")
+    5
+    """
+    if not text or not isinstance(text, str):
+        return 0
+    return len(text.split())
+
+
+def sentence_count(text: str) -> int:
+    """Return an approximate sentence count by splitting on ``.``, ``!``, ``?``.
+
+    Parameters
+    ----------
+    text:
+        Raw plot string (not pre-normalised, since normalisation strips punctuation).
+
+    Returns
+    -------
+    int
+        Sentence count; at least 1 for any non-empty string.
+
+    Examples
+    --------
+    >>> sentence_count("He ran. She laughed! Why?")
+    3
+    """
+    if not text or not isinstance(text, str):
+        return 0
+    parts = re.split(r"[.!?]+", text.strip())
+    return max(1, sum(1 for p in parts if p.strip()))
+
+
 def clean_and_save(input_path: str, output_path: str) -> None:
     """
     Run full cleaning pipeline and save processed CSV.
