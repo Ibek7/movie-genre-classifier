@@ -1,5 +1,12 @@
 import pandas as pd
-from src.preprocessing.cleaner import normalize_text, drop_duplicates, drop_missing, clean_and_save
+from src.preprocessing.cleaner import (
+    normalize_text,
+    drop_duplicates,
+    drop_missing,
+    clean_and_save,
+    word_count,
+    sentence_count,
+)
 from src.preprocessing.tokenizer import tokenize, tokenize_batch
 
 def test_normalize_text():
@@ -90,3 +97,51 @@ def test_tokenize_batch_order_matches_input():
     # 'action' appears in first doc, not second
     assert any("action" in t for t in result[0])
     assert all("action" not in t for t in result[1])
+
+
+# ---------------------------------------------------------------------------
+# word_count tests
+# ---------------------------------------------------------------------------
+
+def test_word_count_basic():
+    assert word_count("A hero saves the world") == 5
+
+
+def test_word_count_single_word():
+    assert word_count("Drama") == 1
+
+
+def test_word_count_empty_string():
+    assert word_count("") == 0
+
+
+def test_word_count_none_input():
+    assert word_count(None) == 0
+
+
+def test_word_count_extra_spaces():
+    assert word_count("  hello   world  ") == 2
+
+
+# ---------------------------------------------------------------------------
+# sentence_count tests
+# ---------------------------------------------------------------------------
+
+def test_sentence_count_basic():
+    assert sentence_count("He ran. She laughed! Why?") == 3
+
+
+def test_sentence_count_single_sentence():
+    assert sentence_count("A boy loved movies.") == 1
+
+
+def test_sentence_count_no_punctuation():
+    assert sentence_count("no punctuation here") == 1
+
+
+def test_sentence_count_empty_string():
+    assert sentence_count("") == 0
+
+
+def test_sentence_count_none_input():
+    assert sentence_count(None) == 0
