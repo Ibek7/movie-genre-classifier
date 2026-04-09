@@ -7,7 +7,7 @@ either display it interactively or save it without side-effects.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -193,6 +193,95 @@ def plot_precision_recall_per_class(
     ax.set_ylabel("Score")
     ax.set_title(title)
     ax.legend()
+    fig.tight_layout()
+    if save_path is not None:
+        Path(save_path).parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(save_path)
+    return fig
+
+
+def plot_learning_curve(
+    train_sizes: List[int],
+    train_scores: List[float],
+    val_scores: List[float],
+    title: str = "Learning Curve",
+    save_path: Optional[str | Path] = None,
+) -> plt.Figure:
+    """Line chart comparing training and validation accuracy across dataset sizes.
+
+    Useful for diagnosing bias/variance trade-offs: if train accuracy is high
+    but val accuracy is low the model is overfitting; if both are low the model
+    is underfitting.
+
+    Parameters
+    ----------
+    train_sizes:
+        List of training-set sizes (x-axis).
+    train_scores:
+        Mean training accuracy at each size.
+    val_scores:
+        Mean validation accuracy at each size.
+    title:
+        Figure title.
+    save_path:
+        When provided the figure is saved to this path before being returned.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+    """
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.plot(train_sizes, train_scores, "o-", color="steelblue", label="Train accuracy")
+    ax.plot(train_sizes, val_scores, "s--", color="coral", label="Validation accuracy")
+    ax.set_xlabel("Training set size")
+    ax.set_ylabel("Accuracy")
+    ax.set_title(title)
+    ax.set_ylim(0, 1.05)
+    ax.legend()
+    ax.grid(axis="y", linestyle="--", alpha=0.5)
+    fig.tight_layout()
+    if save_path is not None:
+        Path(save_path).parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(save_path)
+    return fig
+
+
+def plot_f1_heatmap(
+    report: Dict[str, Dict[str, float]],
+    title: str = "F1 Score per Class",
+    save_path: Optional[str | Path] = None,
+) -> plt.Figure:
+    """Single-column heatmap of per-class F1 scores from a classification report.
+
+    Parameters
+    ----------
+    report:
+        Dict produced by :func:`src.utils.helpers.compute_classification_report`
+        (``output_dict=True``).  Keys are class names; values are dicts
+        containing at least ``"f1-score"``.
+    title:
+        Figure title.
+    save_path:
+        When provided the figure is saved to this path before being returned.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+    """
+    skip = {"accuracy", "macro avg", "weighted avg"}
+    classes = [c for c in report if c not in skip]
+    f1_scores = np.array([report[c]["f1-score"] for c in classes]).reshape(-1, 1)
+
+    fig, ax = plt.subplots(figsize=(3, max(4, len(classes) // 2)))
+    im = ax.imshow(f1_scores, aspect="auto", cmap="RdYlGn", vmin=0, vmax=1)
+    fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    ax.set_yticks(np.arange(len(classes)))
+    ax.set_yticklabels(classes)
+    ax.set_xticks([])
+    ax.set_title(title)
+    for i, score in enumerate(f1_scores.flatten()):
+        ax.text(0, i, f"{score:.2f}", ha="center", va="center",
+                color="black", fontsize=9)
     fig.tight_layout()
     if save_path is not None:
         Path(save_path).parent.mkdir(parents=True, exist_ok=True)
