@@ -2,8 +2,16 @@
 
 import json
 import pytest
+import pandas as pd
 
-from src.utils.helpers import ensure_dir, load_json, save_json, format_accuracy
+from src.utils.helpers import (
+    ensure_dir,
+    load_json,
+    save_json,
+    format_accuracy,
+    compute_classification_report,
+    get_top_genres,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -88,3 +96,79 @@ def test_format_accuracy_zero():
 
 def test_format_accuracy_one():
     assert format_accuracy(1.0) == "100.00%"
+
+
+# ---------------------------------------------------------------------------
+# compute_classification_report
+# ---------------------------------------------------------------------------
+
+def test_classification_report_returns_dict():
+    report = compute_classification_report(["Action", "Drama"], ["Action", "Drama"])
+    assert isinstance(report, dict)
+
+
+def test_classification_report_contains_per_class_keys():
+    report = compute_classification_report(
+        ["Action", "Drama", "Action"],
+        ["Action", "Action", "Action"],
+    )
+    assert "Action" in report
+    assert "Drama" in report
+
+
+def test_classification_report_contains_summary_keys():
+    report = compute_classification_report(["Action", "Drama"], ["Action", "Drama"])
+    assert "macro avg" in report
+    assert "weighted avg" in report
+
+
+def test_classification_report_perfect_precision():
+    y = ["Comedy"] * 5
+    report = compute_classification_report(y, y)
+    assert report["Comedy"]["precision"] == 1.0
+    assert report["Comedy"]["recall"] == 1.0
+
+
+def test_classification_report_string_output():
+    report_str = compute_classification_report(
+        ["Action", "Drama"], ["Action", "Drama"], output_dict=False
+    )
+    assert isinstance(report_str, str)
+    assert "Action" in report_str
+
+
+# ---------------------------------------------------------------------------
+# get_top_genres
+# ---------------------------------------------------------------------------
+
+def test_get_top_genres_returns_list():
+    s = pd.Series(["Action|Drama", "Drama|Comedy", "Action"])
+    result = get_top_genres(s, top_n=2)
+    assert isinstance(result, list)
+
+
+def test_get_top_genres_correct_order():
+    s = pd.Series(["Drama", "Drama", "Action", "Comedy"])
+    result = get_top_genres(s, top_n=3)
+    assert result[0] == "Drama"  # most frequent
+
+
+def test_get_top_genres_respects_top_n():
+    s = pd.Series(["Drama", "Action", "Comedy", "Horror", "Thriller"])
+    result = get_top_genres(s, top_n=3)
+    assert len(result) <= 3
+
+
+def test_get_top_genres_primary_only():
+    s = pd.Series(["Action|Drama", "Action|Comedy", "Drama"])
+    result = get_top_genres(s, top_n=5, primary_only=True)
+    # primary label is before the pipe; Action appears twice
+    assert result[0] == "Action"
+
+
+def test_get_top_genres_all_labels():
+    s = pd.Series(["Action|Drama", "Action|Drama"])
+    result = get_top_genres(s, top_n=5, primary_only=False)
+    # Both Action and Drama should appear when counting all labels
+    assert "Action" in result
+    assert "Drama" in result
