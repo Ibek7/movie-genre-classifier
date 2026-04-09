@@ -135,6 +135,49 @@ def truncate_plot(text: str, max_words: int = 200) -> str:
     return " ".join(tokens[:max_words])
 
 
+def filter_short_plots(df: pd.DataFrame, min_words: int = 20, plot_col: str = "Plot") -> pd.DataFrame:
+    """Remove rows whose plot contains fewer than *min_words* tokens.
+
+    Very short plots (stub articles, redirect pages, etc.) add noise and
+    rarely carry enough signal for reliable genre classification.
+
+    Parameters
+    ----------
+    df:
+        DataFrame that must contain a column named *plot_col*.
+    min_words:
+        Minimum number of whitespace-separated tokens required to keep a row.
+        Default is 20.  Must be a positive integer.
+    plot_col:
+        Name of the column containing plot text (default ``"Plot"``).
+
+    Returns
+    -------
+    pandas.DataFrame
+        Filtered DataFrame with short-plot rows removed.  The original index
+        is preserved (not reset).
+
+    Raises
+    ------
+    ValueError
+        If *plot_col* is not present in *df* or *min_words* ≤ 0.
+
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> df = pd.DataFrame({"Plot": ["short", "a much longer plot summary with many words here"]})
+    >>> filter_short_plots(df, min_words=5)
+       Plot
+    1  a much longer plot summary with many words here
+    """
+    if min_words <= 0:
+        raise ValueError(f"min_words must be a positive integer, got {min_words}")
+    if plot_col not in df.columns:
+        raise ValueError(f"Column '{plot_col}' not found in DataFrame")
+    mask = df[plot_col].fillna("").apply(word_count) >= min_words
+    return df[mask]
+
+
 def clean_and_save(input_path: str, output_path: str) -> None:
     """
     Run full cleaning pipeline and save processed CSV.
