@@ -1,4 +1,5 @@
 import pandas as pd
+import pytest
 from src.preprocessing.cleaner import (
     normalize_text,
     drop_duplicates,
@@ -6,6 +7,8 @@ from src.preprocessing.cleaner import (
     clean_and_save,
     word_count,
     sentence_count,
+    truncate_plot,
+    filter_short_plots,
 )
 from src.preprocessing.tokenizer import tokenize, tokenize_batch
 
@@ -145,3 +148,77 @@ def test_sentence_count_empty_string():
 
 def test_sentence_count_none_input():
     assert sentence_count(None) == 0
+
+
+# ---------------------------------------------------------------------------
+# truncate_plot tests
+# ---------------------------------------------------------------------------
+
+def test_truncate_plot_trims_to_max_words():
+    text = "one two three four five six seven eight nine ten"
+    assert truncate_plot(text, max_words=5) == "one two three four five"
+
+
+def test_truncate_plot_unchanged_when_shorter_than_limit():
+    text = "short plot"
+    assert truncate_plot(text, max_words=100) == "short plot"
+
+
+def test_truncate_plot_empty_string_returns_empty():
+    assert truncate_plot("", max_words=10) == ""
+
+
+def test_truncate_plot_none_returns_empty():
+    assert truncate_plot(None, max_words=10) == ""
+
+
+def test_truncate_plot_zero_max_words_raises():
+    with pytest.raises(ValueError, match="max_words"):
+        truncate_plot("some text", max_words=0)
+
+
+def test_truncate_plot_negative_max_words_raises():
+    with pytest.raises(ValueError, match="max_words"):
+        truncate_plot("some text", max_words=-5)
+
+
+# ---------------------------------------------------------------------------
+# filter_short_plots tests
+# ---------------------------------------------------------------------------
+
+def test_filter_short_plots_removes_short_rows():
+    df = pd.DataFrame({"Plot": ["short", "a much longer plot with many more words in it here"]})
+    result = filter_short_plots(df, min_words=5)
+    assert len(result) == 1
+    assert "longer" in result["Plot"].iloc[0]
+
+
+def test_filter_short_plots_keeps_all_when_all_long_enough():
+    df = pd.DataFrame({"Plot": ["this has five words here", "another five word plot now"]})
+    result = filter_short_plots(df, min_words=5)
+    assert len(result) == 2
+
+
+def test_filter_short_plots_removes_all_when_all_short():
+    df = pd.DataFrame({"Plot": ["tiny", "stub"]})
+    result = filter_short_plots(df, min_words=10)
+    assert len(result) == 0
+
+
+def test_filter_short_plots_invalid_min_words_raises():
+    df = pd.DataFrame({"Plot": ["some text"]})
+    with pytest.raises(ValueError, match="min_words"):
+        filter_short_plots(df, min_words=0)
+
+
+def test_filter_short_plots_missing_column_raises():
+    df = pd.DataFrame({"text": ["some text"]})
+    with pytest.raises(ValueError, match="not found"):
+        filter_short_plots(df, min_words=5)
+
+
+def test_filter_short_plots_handles_null_plots():
+    df = pd.DataFrame({"Plot": [None, "a plot with enough words to pass the filter"]})
+    result = filter_short_plots(df, min_words=5)
+    # None is treated as empty (0 words), so it should be filtered out
+    assert len(result) == 1
