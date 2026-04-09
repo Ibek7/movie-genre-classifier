@@ -130,6 +130,46 @@ def predict_proba(
     return [dict(zip(classes, row.tolist())) for row in proba_matrix]
 
 
+def predict_with_confidence(
+    plots: List[str],
+    vec_path: Union[str, Path],
+    model_path: Union[str, Path],
+) -> List[dict]:
+    """Return each plot's top predicted genre together with its confidence score.
+
+    This is a convenience wrapper around :func:`predict_proba` that surfaces
+    only the winning class and its probability, making it easy to build
+    downstream UIs or threshold-based rejection logic.
+
+    Parameters
+    ----------
+    plots:
+        Raw plot strings to classify.
+    vec_path:
+        Path to the saved TF-IDF vectorizer.
+    model_path:
+        Path to the saved trained model (must support ``predict_proba``).
+
+    Returns
+    -------
+    list[dict]
+        A list with one dict per plot containing keys ``"genre"`` (str) and
+        ``"confidence"`` (float in ``[0, 1]``).
+
+    Examples
+    --------
+    >>> results = predict_with_confidence(["A hero saves the world"], vec, model)
+    >>> results[0].keys()
+    dict_keys(['genre', 'confidence'])
+    """
+    proba_dicts = predict_proba(plots, vec_path, model_path)
+    results = []
+    for proba in proba_dicts:
+        top_genre = max(proba, key=proba.__getitem__)
+        results.append({"genre": top_genre, "confidence": round(proba[top_genre], 4)})
+    return results
+
+
 def predict_from_csv(
     input_csv: Union[str, Path],
     output_csv: Union[str, Path],
