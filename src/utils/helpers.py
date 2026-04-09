@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import time
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -116,3 +117,56 @@ def compute_classification_report(
     True
     """
     return classification_report(y_true, y_pred, output_dict=output_dict, zero_division=0)
+
+
+def format_duration(seconds: float) -> str:
+    """Format a duration in seconds as a human-readable string.
+
+    Parameters
+    ----------
+    seconds:
+        Elapsed time in seconds (non-negative float).
+
+    Returns
+    -------
+    str
+        Human-readable string such as ``"2m 34s"`` or ``"45.3s"``.
+
+    Examples
+    --------
+    >>> format_duration(154.3)
+    '2m 34s'
+    >>> format_duration(9.7)
+    '9.7s'
+    """
+    if seconds < 0:
+        raise ValueError(f"seconds must be non-negative, got {seconds}")
+    if seconds >= 60:
+        mins = int(seconds // 60)
+        secs = int(seconds % 60)
+        return f"{mins}m {secs}s"
+    return f"{seconds:.1f}s"
+
+
+def elapsed_time(start: float) -> str:
+    """Return a formatted string of the elapsed wall-clock time since *start*.
+
+    Designed to pair with :func:`time.time` for quick in-code profiling:
+
+    .. code-block:: python
+
+        t0 = time.time()
+        # ... expensive operation ...
+        print(elapsed_time(t0))  # e.g. '1m 23s'
+
+    Parameters
+    ----------
+    start:
+        Start timestamp obtained from :func:`time.time`.
+
+    Returns
+    -------
+    str
+        Human-readable elapsed duration via :func:`format_duration`.
+    """
+    return format_duration(time.time() - start)
