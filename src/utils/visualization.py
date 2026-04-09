@@ -12,7 +12,7 @@ from typing import List, Optional
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, precision_recall_fscore_support
 
 
 def plot_genre_distribution(
@@ -141,6 +141,58 @@ def plot_confusion_matrix(
                 color="white" if cm[i, j] > thresh else "black",
                 fontsize=8,
             )
+    fig.tight_layout()
+    if save_path is not None:
+        Path(save_path).parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(save_path)
+    return fig
+
+
+def plot_precision_recall_per_class(
+    y_true: List[str],
+    y_pred: List[str],
+    labels: Optional[List[str]] = None,
+    title: str = "Precision & Recall per Class",
+    save_path: Optional[str | Path] = None,
+) -> plt.Figure:
+    """Grouped bar chart showing precision and recall for every genre class.
+
+    Parameters
+    ----------
+    y_true:
+        Ground-truth genre labels.
+    y_pred:
+        Predicted genre labels from the model.
+    labels:
+        Ordered list of class names.  When *None* the sorted unique values of
+        *y_true* are used.
+    title:
+        Figure title.
+    save_path:
+        When provided the figure is saved to this path before being returned.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+    """
+    if labels is None:
+        labels = sorted(set(y_true))
+
+    precision, recall, _, _ = precision_recall_fscore_support(
+        y_true, y_pred, labels=labels, zero_division=0
+    )
+
+    x = np.arange(len(labels))
+    width = 0.35
+    fig, ax = plt.subplots(figsize=(max(8, len(labels)), 5))
+    ax.bar(x - width / 2, precision, width, label="Precision", color="steelblue", edgecolor="white")
+    ax.bar(x + width / 2, recall, width, label="Recall", color="coral", edgecolor="white")
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, rotation=45, ha="right")
+    ax.set_ylim(0, 1.1)
+    ax.set_ylabel("Score")
+    ax.set_title(title)
+    ax.legend()
     fig.tight_layout()
     if save_path is not None:
         Path(save_path).parent.mkdir(parents=True, exist_ok=True)
