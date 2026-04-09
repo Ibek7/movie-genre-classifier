@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 import pandas as pd
+from sklearn.metrics import classification_report
 
 
 def ensure_dir(path: str | Path) -> Path:
@@ -85,3 +86,33 @@ def get_top_genres(
 
     return labels.value_counts().head(top_n).index.tolist()
 
+
+def compute_classification_report(
+    y_true: List[str],
+    y_pred: List[str],
+    output_dict: bool = True,
+) -> Dict[str, Any]:
+    """Thin wrapper around :func:`sklearn.metrics.classification_report`.
+
+    Parameters
+    ----------
+    y_true:
+        Ground-truth genre labels.
+    y_pred:
+        Predicted genre labels.
+    output_dict:
+        When *True* (default) return the report as a nested dict suitable for
+        JSON serialisation.  When *False* return the human-readable string.
+
+    Returns
+    -------
+    dict | str
+        Per-class precision, recall, F1, support plus macro/weighted averages.
+
+    Examples
+    --------
+    >>> report = compute_classification_report(["Action", "Drama"], ["Action", "Action"])
+    >>> "Drama" in report
+    True
+    """
+    return classification_report(y_true, y_pred, output_dict=output_dict, zero_division=0)
