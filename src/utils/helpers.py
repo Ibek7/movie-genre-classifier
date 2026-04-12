@@ -187,3 +187,12 @@ def safe_divide(numerator: float, denominator: float, default: float = 0.0) -> f
     if denominator == 0:
         return default
     return numerator / denominator
+
+
+def clamp_probability(value: float) -> float:
+    """Clamp any numeric value to the closed probability interval ``[0, 1]``."""
+    if value < 0:
+        return 0.0
+    if value > 1:
+        return 1.0
+    return float(value)
