@@ -9,6 +9,19 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- `detokenize()` in `src/preprocessing/tokenizer.py` for rebuilding text from token lists.
+- `safe_divide()` in `src/utils/helpers.py` for zero-safe ratio calculations.
+- `describe_vectorizer()` in `src/features/vectorizer.py` for compact TF-IDF metadata inspection.
+- Unit tests for `detokenize()` in `tests/test_preprocessing.py`.
+- Unit tests for `safe_divide()` in `tests/test_utils.py`.
+- Unit tests for `describe_vectorizer()` in `tests/test_vectorization.py`.
+
+### Changed
+- `src/preprocessing/__init__.py` now exports tokenizer utilities and text-stat helpers.
+- `src/models/predict.py` now centralizes artifact path checks via `validate_artifact_paths()`.
+- `docs/methodology.md` now includes a dedicated section for developer ergonomics helpers.
+
 ---
 
 ## [0.3.0] — 2025-07-16
