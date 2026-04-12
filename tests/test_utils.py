@@ -13,6 +13,7 @@ from src.utils.helpers import (
     get_top_genres,
     safe_divide,
     clamp_probability,
+    flatten_genre_labels,
 )
 
 
@@ -206,3 +207,22 @@ def test_clamp_probability_caps_high_values_to_one():
 
 def test_clamp_probability_raises_low_values_to_zero():
     assert clamp_probability(-0.2) == 0.0
+
+
+# ---------------------------------------------------------------------------
+# flatten_genre_labels
+# ---------------------------------------------------------------------------
+
+def test_flatten_genre_labels_splits_and_flattens_pipe_delimited_values():
+    s = pd.Series(["Action|Drama", "Comedy|Romance"])
+    assert flatten_genre_labels(s) == ["Action", "Drama", "Comedy", "Romance"]
+
+
+def test_flatten_genre_labels_strips_whitespace_and_drops_empty_tokens():
+    s = pd.Series(["Action | Drama | ", "  Comedy  "])
+    assert flatten_genre_labels(s) == ["Action", "Drama", "Comedy"]
+
+
+def test_flatten_genre_labels_ignores_null_values():
+    s = pd.Series([None, "Thriller|Crime"])
+    assert flatten_genre_labels(s) == ["Thriller", "Crime"]
