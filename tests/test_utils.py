@@ -11,6 +11,7 @@ from src.utils.helpers import (
     format_accuracy,
     compute_classification_report,
     get_top_genres,
+    safe_divide,
 )
 
 
@@ -172,3 +173,19 @@ def test_get_top_genres_all_labels():
     # Both Action and Drama should appear when counting all labels
     assert "Action" in result
     assert "Drama" in result
+
+
+# ---------------------------------------------------------------------------
+# safe_divide
+# ---------------------------------------------------------------------------
+
+def test_safe_divide_regular_case():
+    assert safe_divide(10, 2) == 5
+
+
+def test_safe_divide_zero_denominator_returns_default():
+    assert safe_divide(10, 0) == 0.0
+
+
+def test_safe_divide_zero_denominator_custom_default():
+    assert safe_divide(10, 0, default=-1) == -1
