@@ -126,4 +126,14 @@ pytest -q
 pytest -q tests/test_models.py tests/test_vectorization.py tests/test_predict.py
 ```
 
+## Developer Helper Functions
+
+Recent utility additions for notebook and script ergonomics:
+
+- `src.preprocessing.cleaner.average_word_length(text)` — returns mean token length.
+- `src.preprocessing.tokenizer.unique_tokens(tokens)` — drops duplicate tokens while preserving order.
+- `src.utils.helpers.safe_divide(numerator, denominator, default=0.0)` — avoids zero-division boilerplate.
+- `src.utils.helpers.clamp_probability(value)` — constrains scores to the `[0, 1]` interval.
+- `src.features.vectorizer.describe_vectorizer(vectorizer)` — summarizes fitted state and TF-IDF config.
+
 ---
