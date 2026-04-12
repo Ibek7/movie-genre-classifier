@@ -11,7 +11,7 @@ from src.preprocessing.cleaner import (
     truncate_plot,
     filter_short_plots,
 )
-from src.preprocessing.tokenizer import tokenize, tokenize_batch, detokenize
+from src.preprocessing.tokenizer import tokenize, tokenize_batch, detokenize, unique_tokens
 
 def test_normalize_text():
     raw = "<p>Hello, WORLD!!!</p>\nNew   line."
@@ -117,6 +117,24 @@ def test_detokenize_empty_list_returns_empty_string():
 
 def test_detokenize_handles_non_string_tokens():
     assert detokenize(["episode", 2, "finale"]) == "episode 2 finale"
+
+
+# ---------------------------------------------------------------------------
+# unique_tokens tests
+# ---------------------------------------------------------------------------
+
+def test_unique_tokens_preserves_first_seen_order():
+    tokens = ["action", "drama", "action", "comedy", "drama"]
+    assert unique_tokens(tokens) == ["action", "drama", "comedy"]
+
+
+def test_unique_tokens_empty_input_returns_empty_list():
+    assert unique_tokens([]) == []
+
+
+def test_unique_tokens_all_unique_passthrough():
+    tokens = ["romance", "thriller", "crime"]
+    assert unique_tokens(tokens) == tokens
 
 
 # ---------------------------------------------------------------------------
