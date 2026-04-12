@@ -38,6 +38,22 @@ def preprocess_plots(plots: List[str]) -> List[str]:
     return [normalize_text(p) for p in plots]
 
 
+def validate_artifact_paths(
+    vec_path: Union[str, Path],
+    model_path: Union[str, Path],
+) -> tuple[Path, Path]:
+    """Validate and return vectorizer/model paths as ``Path`` objects."""
+    vec = Path(vec_path)
+    model = Path(model_path)
+
+    if not vec.exists():
+        raise FileNotFoundError(f"Vectorizer not found: {vec_path}")
+    if not model.exists():
+        raise FileNotFoundError(f"Model not found: {model_path}")
+
+    return vec, model
+
+
 def predict(
     plots: List[str],
     vec_path: Union[str, Path],
@@ -56,13 +72,10 @@ def predict(
     if not any(cleaned):
         raise ValueError("plots must contain at least one non-empty summary")
 
-    if not Path(vec_path).exists():
-        raise FileNotFoundError(f"Vectorizer not found: {vec_path}")
-    if not Path(model_path).exists():
-        raise FileNotFoundError(f"Model not found: {model_path}")
+    validated_vec_path, validated_model_path = validate_artifact_paths(vec_path, model_path)
 
-    vec = load_vectorizer(vec_path)
-    model = load_model(model_path)
+    vec = load_vectorizer(validated_vec_path)
+    model = load_model(validated_model_path)
 
     X = transform_plots(vec, pd.Series(cleaned))
     return model.predict(X).tolist()
@@ -112,13 +125,10 @@ def predict_proba(
         raise ValueError("plots must contain at least one plot summary")
 
     cleaned = preprocess_plots(plots)
-    if not Path(vec_path).exists():
-        raise FileNotFoundError(f"Vectorizer not found: {vec_path}")
-    if not Path(model_path).exists():
-        raise FileNotFoundError(f"Model not found: {model_path}")
+    validated_vec_path, validated_model_path = validate_artifact_paths(vec_path, model_path)
 
-    vec = load_vectorizer(vec_path)
-    model = load_model(model_path)
+    vec = load_vectorizer(validated_vec_path)
+    model = load_model(validated_model_path)
 
     if not hasattr(model, "predict_proba"):
         raise AttributeError(
