@@ -7,11 +7,12 @@ from .cleaner import (
     normalize_text,
     clean_and_save,
     word_count,
+    average_word_length,
     sentence_count,
     truncate_plot,
     filter_short_plots,
 )
-from .tokenizer import tokenize, tokenize_batch, detokenize
+from .tokenizer import tokenize, tokenize_batch, detokenize, unique_tokens
 
 __all__ = [
     "load_data",
@@ -20,10 +21,12 @@ __all__ = [
     "normalize_text",
     "clean_and_save",
     "word_count",
+    "average_word_length",
     "sentence_count",
     "truncate_plot",
     "filter_short_plots",
     "tokenize",
     "tokenize_batch",
     "detokenize",
+    "unique_tokens",
 ]
