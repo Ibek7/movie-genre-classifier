@@ -7,6 +7,7 @@ helpers
   load_json / save_json        — read / write JSON with automatic dir creation.
   format_accuracy              — format a float as a percentage string.
   get_top_genres               — top-N most frequent genres from a Series.
+  flatten_genre_labels         — flatten multi-label genre strings.
   compute_classification_report — sklearn classification_report as a dict.
   format_duration              — human-readable seconds string (e.g. '2m 34s').
   elapsed_time                 — formatted wall-clock elapsed time since a start.
@@ -20,6 +21,7 @@ visualization
   plot_precision_recall_per_class — grouped precision/recall bar chart.
   plot_learning_curve          — train vs. validation accuracy over dataset size.
   plot_f1_heatmap              — per-class F1 single-column heatmap.
+  normalize_confusion_matrix_values — row-normalize confusion matrix arrays.
 """
 
 from .helpers import (
@@ -28,6 +30,7 @@ from .helpers import (
     save_json,
     format_accuracy,
     get_top_genres,
+    flatten_genre_labels,
     compute_classification_report,
     format_duration,
     elapsed_time,
@@ -41,6 +44,7 @@ from .visualization import (
     plot_precision_recall_per_class,
     plot_learning_curve,
     plot_f1_heatmap,
+    normalize_confusion_matrix_values,
 )
 
 __all__ = [
@@ -50,6 +54,7 @@ __all__ = [
     "save_json",
     "format_accuracy",
     "get_top_genres",
+    "flatten_genre_labels",
     "compute_classification_report",
     "format_duration",
     "elapsed_time",
@@ -62,4 +67,5 @@ __all__ = [
     "plot_precision_recall_per_class",
     "plot_learning_curve",
     "plot_f1_heatmap",
+    "normalize_confusion_matrix_values",
 ]
