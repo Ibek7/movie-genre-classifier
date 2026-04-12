@@ -6,6 +6,7 @@ from src.preprocessing.cleaner import (
     drop_missing,
     clean_and_save,
     word_count,
+    average_word_length,
     sentence_count,
     truncate_plot,
     filter_short_plots,
@@ -140,6 +141,23 @@ def test_word_count_none_input():
 
 def test_word_count_extra_spaces():
     assert word_count("  hello   world  ") == 2
+
+
+# ---------------------------------------------------------------------------
+# average_word_length tests
+# ---------------------------------------------------------------------------
+
+def test_average_word_length_basic():
+    # (5 + 5) / 2 = 5
+    assert average_word_length("hello world") == 5.0
+
+
+def test_average_word_length_empty_string():
+    assert average_word_length("") == 0.0
+
+
+def test_average_word_length_none_input():
+    assert average_word_length(None) == 0.0
 
 
 # ---------------------------------------------------------------------------
