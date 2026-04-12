@@ -10,7 +10,7 @@ from src.preprocessing.cleaner import (
     truncate_plot,
     filter_short_plots,
 )
-from src.preprocessing.tokenizer import tokenize, tokenize_batch
+from src.preprocessing.tokenizer import tokenize, tokenize_batch, detokenize
 
 def test_normalize_text():
     raw = "<p>Hello, WORLD!!!</p>\nNew   line."
@@ -100,6 +100,22 @@ def test_tokenize_batch_order_matches_input():
     # 'action' appears in first doc, not second
     assert any("action" in t for t in result[0])
     assert all("action" not in t for t in result[1])
+
+
+# ---------------------------------------------------------------------------
+# detokenize tests
+# ---------------------------------------------------------------------------
+
+def test_detokenize_joins_with_single_spaces():
+    assert detokenize(["action", "hero", "saves", "world"]) == "action hero saves world"
+
+
+def test_detokenize_empty_list_returns_empty_string():
+    assert detokenize([]) == ""
+
+
+def test_detokenize_handles_non_string_tokens():
+    assert detokenize(["episode", 2, "finale"]) == "episode 2 finale"
 
 
 # ---------------------------------------------------------------------------
