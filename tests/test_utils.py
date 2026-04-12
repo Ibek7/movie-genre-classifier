@@ -12,6 +12,7 @@ from src.utils.helpers import (
     compute_classification_report,
     get_top_genres,
     safe_divide,
+    clamp_probability,
 )
 
 
@@ -189,3 +190,19 @@ def test_safe_divide_zero_denominator_returns_default():
 
 def test_safe_divide_zero_denominator_custom_default():
     assert safe_divide(10, 0, default=-1) == -1
+
+
+# ---------------------------------------------------------------------------
+# clamp_probability
+# ---------------------------------------------------------------------------
+
+def test_clamp_probability_keeps_values_inside_range():
+    assert clamp_probability(0.42) == 0.42
+
+
+def test_clamp_probability_caps_high_values_to_one():
+    assert clamp_probability(1.8) == 1.0
+
+
+def test_clamp_probability_raises_low_values_to_zero():
+    assert clamp_probability(-0.2) == 0.0
