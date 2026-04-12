@@ -80,3 +80,17 @@ def detokenize(tokens: list[str]) -> str:
     if not tokens:
         return ""
     return " ".join(str(token) for token in tokens).strip()
+
+
+def unique_tokens(tokens: list[str]) -> list[str]:
+    """Return unique tokens while preserving their first-seen order."""
+    if not tokens:
+        return []
+    seen = set()
+    result = []
+    for token in tokens:
+        if token in seen:
+            continue
+        seen.add(token)
+        result.append(token)
+    return result
