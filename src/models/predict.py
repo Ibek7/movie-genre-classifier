@@ -54,6 +54,22 @@ def validate_artifact_paths(
     return vec, model
 
 
+def top_k_from_proba_dict(proba: dict[str, float], k: int = 3) -> list[dict]:
+    """Return top-*k* classes from a probability dictionary.
+
+    Parameters
+    ----------
+    proba:
+        Mapping of class label to probability.
+    k:
+        Number of ranked classes to return.
+    """
+    if k <= 0:
+        raise ValueError(f"k must be a positive integer, got {k}")
+    ranked = sorted(proba.items(), key=lambda x: x[1], reverse=True)
+    return [{"genre": genre, "confidence": round(score, 4)} for genre, score in ranked[:k]]
+
+
 def predict(
     plots: List[str],
     vec_path: Union[str, Path],
@@ -225,13 +241,7 @@ def predict_top_k(
     if k <= 0:
         raise ValueError(f"k must be a positive integer, got {k}")
     proba_dicts = predict_proba(plots, vec_path, model_path)
-    results = []
-    for proba in proba_dicts:
-        ranked = sorted(proba.items(), key=lambda x: x[1], reverse=True)
-        results.append(
-            [{"genre": g, "confidence": round(p, 4)} for g, p in ranked[:k]]
-        )
-    return results
+    return [top_k_from_proba_dict(proba, k=k) for proba in proba_dicts]
 
 
 def predict_from_csv(
