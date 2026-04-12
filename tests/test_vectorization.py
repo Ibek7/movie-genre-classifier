@@ -6,6 +6,7 @@ from src.features.vectorizer import (
     save_vectorizer,
     load_vectorizer,
     get_vocabulary_size,
+    describe_vectorizer,
 )
 
 def test_vectorizer_shapes():
@@ -102,3 +103,29 @@ def test_save_vectorizer_creates_parent_dirs(tmp_path):
     nested = tmp_path / "a" / "b" / "c" / "vec.joblib"
     save_vectorizer(vec, nested)
     assert nested.exists()
+
+
+# ---------------------------------------------------------------------------
+# describe_vectorizer
+# ---------------------------------------------------------------------------
+
+def test_describe_vectorizer_fitted_metadata():
+    sample = pd.Series(["action drama", "romance comedy"])
+    vec = fit_vectorizer(sample, max_features=25, ngram_range=(1, 2), min_df=1)
+    meta = describe_vectorizer(vec)
+
+    assert meta["is_fitted"] is True
+    assert meta["vocabulary_size"] > 0
+    assert meta["max_features"] == 25
+    assert meta["ngram_range"] == (1, 2)
+
+
+def test_describe_vectorizer_unfitted_metadata():
+    from sklearn.feature_extraction.text import TfidfVectorizer
+
+    vec = TfidfVectorizer(max_features=12, ngram_range=(1, 1))
+    meta = describe_vectorizer(vec)
+
+    assert meta["is_fitted"] is False
+    assert meta["vocabulary_size"] == 0
+    assert meta["max_features"] == 12
