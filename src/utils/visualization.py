@@ -15,6 +15,16 @@ import pandas as pd
 from sklearn.metrics import confusion_matrix, precision_recall_fscore_support
 
 
+def normalize_confusion_matrix_values(cm: np.ndarray) -> np.ndarray:
+    """Row-normalize a confusion matrix so each row sums to 1 when possible.
+
+    Rows with sum 0 are left as all zeros.
+    """
+    matrix = np.asarray(cm, dtype=float)
+    row_sums = matrix.sum(axis=1, keepdims=True)
+    return np.divide(matrix, row_sums, out=np.zeros_like(matrix), where=row_sums != 0)
+
+
 def plot_genre_distribution(
     labels: pd.Series,
     title: str = "Genre Distribution",
