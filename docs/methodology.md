@@ -155,3 +155,19 @@ helpers are now part of the codebase:
 
 These utilities do not alter model behaviour, but they improve readability,
 reduce repeated boilerplate, and make debugging notebook experiments easier.
+
+---
+
+## 13. Prediction Ranking & Diagnostics Helpers
+
+Recent additions also improve post-model analysis and output ranking:
+
+- **`top_k_from_proba_dict(proba, k)`** in `src/models/predict.py` extracts
+	top-ranked genre candidates from probability dictionaries and keeps output
+	formatting consistent with `predict_top_k`.
+- **`normalize_confusion_matrix_values(cm)`** in `src/utils/visualization.py`
+	row-normalises confusion matrices so error patterns can be compared across
+	classes with very different support.
+- **`flatten_genre_labels(series)`** in `src/utils/helpers.py` converts
+	multi-label strings (e.g. `"Action|Drama"`) into a flat label list that is
+	easier to aggregate in EDA notebooks.
