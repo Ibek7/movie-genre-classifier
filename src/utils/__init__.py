@@ -10,6 +10,8 @@ helpers
   compute_classification_report — sklearn classification_report as a dict.
   format_duration              — human-readable seconds string (e.g. '2m 34s').
   elapsed_time                 — formatted wall-clock elapsed time since a start.
+  safe_divide                  — zero-safe division helper.
+  clamp_probability            — clamp numeric values to [0, 1].
 
 visualization
   plot_genre_distribution      — bar chart of genre frequencies.
@@ -29,6 +31,8 @@ from .helpers import (
     compute_classification_report,
     format_duration,
     elapsed_time,
+    safe_divide,
+    clamp_probability,
 )
 from .visualization import (
     plot_genre_distribution,
@@ -49,6 +53,8 @@ __all__ = [
     "compute_classification_report",
     "format_duration",
     "elapsed_time",
+    "safe_divide",
+    "clamp_probability",
     # visualization
     "plot_genre_distribution",
     "plot_model_comparison",
