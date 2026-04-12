@@ -170,3 +170,20 @@ def elapsed_time(start: float) -> str:
         Human-readable elapsed duration via :func:`format_duration`.
     """
     return format_duration(time.time() - start)
+
+
+def safe_divide(numerator: float, denominator: float, default: float = 0.0) -> float:
+    """Return ``numerator / denominator`` while guarding against zero division.
+
+    Parameters
+    ----------
+    numerator:
+        Dividend value.
+    denominator:
+        Divisor value.
+    default:
+        Value returned when ``denominator`` is zero.
+    """
+    if denominator == 0:
+        return default
+    return numerator / denominator
