@@ -16,7 +16,14 @@ import joblib
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-__all__ = ["fit_vectorizer", "transform_plots", "save_vectorizer", "load_vectorizer", "get_vocabulary_size"]
+__all__ = [
+    "fit_vectorizer",
+    "transform_plots",
+    "save_vectorizer",
+    "load_vectorizer",
+    "get_vocabulary_size",
+    "describe_vectorizer",
+]
 
 def fit_vectorizer(
     plots: pd.Series,
@@ -170,3 +177,31 @@ def get_vocabulary_size(vectorizer: TfidfVectorizer) -> int:
             "Call fit_vectorizer() before get_vocabulary_size()."
         )
     return len(vectorizer.vocabulary_)
+
+
+def describe_vectorizer(vectorizer: TfidfVectorizer) -> dict:
+    """Return a compact metadata summary for a TF-IDF vectorizer.
+
+    Parameters
+    ----------
+    vectorizer:
+        Any :class:`~sklearn.feature_extraction.text.TfidfVectorizer`
+        instance, fitted or unfitted.
+
+    Returns
+    -------
+    dict
+        Dictionary including ``is_fitted``, ``vocabulary_size``,
+        ``max_features``, ``ngram_range``, ``min_df``, ``max_df``, and
+        ``stop_words`` configuration.
+    """
+    is_fitted = hasattr(vectorizer, "vocabulary_")
+    return {
+        "is_fitted": is_fitted,
+        "vocabulary_size": len(vectorizer.vocabulary_) if is_fitted else 0,
+        "max_features": vectorizer.max_features,
+        "ngram_range": vectorizer.ngram_range,
+        "min_df": vectorizer.min_df,
+        "max_df": vectorizer.max_df,
+        "stop_words": vectorizer.stop_words,
+    }
