@@ -13,14 +13,22 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `detokenize()` in `src/preprocessing/tokenizer.py` for rebuilding text from token lists.
 - `safe_divide()` in `src/utils/helpers.py` for zero-safe ratio calculations.
 - `describe_vectorizer()` in `src/features/vectorizer.py` for compact TF-IDF metadata inspection.
+- `average_word_length()` in `src/preprocessing/cleaner.py` for quick lexical-complexity checks.
+- `unique_tokens()` in `src/preprocessing/tokenizer.py` for order-preserving token deduplication.
+- `clamp_probability()` in `src/utils/helpers.py` to constrain scores to the `[0, 1]` range.
 - Unit tests for `detokenize()` in `tests/test_preprocessing.py`.
 - Unit tests for `safe_divide()` in `tests/test_utils.py`.
 - Unit tests for `describe_vectorizer()` in `tests/test_vectorization.py`.
+- Unit tests for `average_word_length()` and `unique_tokens()` in `tests/test_preprocessing.py`.
+- Unit tests for `clamp_probability()` in `tests/test_utils.py`.
 
 ### Changed
 - `src/preprocessing/__init__.py` now exports tokenizer utilities and text-stat helpers.
 - `src/models/predict.py` now centralizes artifact path checks via `validate_artifact_paths()`.
 - `docs/methodology.md` now includes a dedicated section for developer ergonomics helpers.
+- `src/preprocessing/__init__.py` now also exports `average_word_length` and `unique_tokens`.
+- `src/utils/__init__.py` now exports `safe_divide` and `clamp_probability`.
+- `README.md` now includes a dedicated "Developer Helper Functions" section.
 
 ---
 
