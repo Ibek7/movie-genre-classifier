@@ -137,3 +137,21 @@ All magic numbers and default filenames are centralised in `src/constants.py`:
 | `DEFAULT_MAX_FEATURES` | 5 000 | TF-IDF vocabulary cap |
 | `DEFAULT_TEST_SIZE` | 0.2 | Train/test split fraction |
 | `DEFAULT_RANDOM_STATE` | 42 | Reproducibility seed |
+
+---
+
+## 12. Developer Ergonomics Helpers
+
+To keep experimentation and production scripts concise, several lightweight
+helpers are now part of the codebase:
+
+- **`detokenize(tokens)`** in `src/preprocessing/tokenizer.py` for reconstructing
+	a human-readable sentence from token lists.
+- **`safe_divide(numerator, denominator, default=0.0)`** in
+	`src/utils/helpers.py` for ratio calculations without repetitive
+	try/except or denominator guards.
+- **`describe_vectorizer(vectorizer)`** in `src/features/vectorizer.py` for
+	introspecting fitted state and key TF-IDF configuration values.
+
+These utilities do not alter model behaviour, but they improve readability,
+reduce repeated boilerplate, and make debugging notebook experiments easier.
