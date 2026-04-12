@@ -74,6 +74,27 @@ def word_count(text: str) -> int:
     return len(text.split())
 
 
+def average_word_length(text: str) -> float:
+    """Return the average token length for whitespace-separated words.
+
+    Parameters
+    ----------
+    text:
+        Raw or pre-normalised plot string.
+
+    Returns
+    -------
+    float
+        Mean token length. Returns ``0.0`` for empty/non-string input.
+    """
+    if not text or not isinstance(text, str):
+        return 0.0
+    tokens = text.split()
+    if not tokens:
+        return 0.0
+    return sum(len(token) for token in tokens) / len(tokens)
+
+
 def sentence_count(text: str) -> int:
     """Return an approximate sentence count by splitting on ``.``, ``!``, ``?``.
 
