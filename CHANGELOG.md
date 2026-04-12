@@ -16,11 +16,17 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `average_word_length()` in `src/preprocessing/cleaner.py` for quick lexical-complexity checks.
 - `unique_tokens()` in `src/preprocessing/tokenizer.py` for order-preserving token deduplication.
 - `clamp_probability()` in `src/utils/helpers.py` to constrain scores to the `[0, 1]` range.
+- `normalize_confusion_matrix_values()` in `src/utils/visualization.py` for row-normalized confusion-matrix diagnostics.
+- `top_k_from_proba_dict()` in `src/models/predict.py` for reusable top-k ranking from class probabilities.
+- `flatten_genre_labels()` in `src/utils/helpers.py` for flattening multi-label genre strings into a clean list.
 - Unit tests for `detokenize()` in `tests/test_preprocessing.py`.
 - Unit tests for `safe_divide()` in `tests/test_utils.py`.
 - Unit tests for `describe_vectorizer()` in `tests/test_vectorization.py`.
 - Unit tests for `average_word_length()` and `unique_tokens()` in `tests/test_preprocessing.py`.
 - Unit tests for `clamp_probability()` in `tests/test_utils.py`.
+- Unit tests for `normalize_confusion_matrix_values()` in `tests/test_visualization.py`.
+- Unit tests for `top_k_from_proba_dict()` in `tests/test_predict.py`.
+- Unit tests for `flatten_genre_labels()` in `tests/test_utils.py`.
 
 ### Changed
 - `src/preprocessing/__init__.py` now exports tokenizer utilities and text-stat helpers.
@@ -29,6 +35,9 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `src/preprocessing/__init__.py` now also exports `average_word_length` and `unique_tokens`.
 - `src/utils/__init__.py` now exports `safe_divide` and `clamp_probability`.
 - `README.md` now includes a dedicated "Developer Helper Functions" section.
+- `src/models/__init__.py` now exports `top_k_from_proba_dict`.
+- `src/utils/__init__.py` now also exports `flatten_genre_labels` and `normalize_confusion_matrix_values`.
+- `docs/methodology.md` now includes a section on ranking and diagnostics helpers.
 
 ---
 
