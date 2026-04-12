@@ -196,3 +196,24 @@ def clamp_probability(value: float) -> float:
     if value > 1:
         return 1.0
     return float(value)
+
+
+def flatten_genre_labels(values: pd.Series, sep: str = "|") -> List[str]:
+    """Flatten a pipe-delimited genre Series into a cleaned label list.
+
+    Parameters
+    ----------
+    values:
+        Series containing genre strings such as ``"Action|Drama"``.
+    sep:
+        Delimiter used to split multi-label rows.
+    """
+    labels = (
+        values.dropna()
+        .astype(str)
+        .str.split(sep)
+        .explode()
+        .str.strip()
+    )
+    labels = labels[labels != ""]
+    return labels.tolist()
