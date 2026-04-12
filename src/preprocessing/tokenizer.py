@@ -62,3 +62,21 @@ def tokenize_batch(
             tokens.append(lemma)
         results.append(tokens)
     return results
+
+
+def detokenize(tokens: list[str]) -> str:
+    """Reconstruct text from a token list using single-space joins.
+
+    Parameters
+    ----------
+    tokens:
+        Token list produced by :func:`tokenize` or :func:`tokenize_batch`.
+
+    Returns
+    -------
+    str
+        A space-joined string. Empty lists return an empty string.
+    """
+    if not tokens:
+        return ""
+    return " ".join(str(token) for token in tokens).strip()
