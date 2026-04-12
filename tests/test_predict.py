@@ -10,6 +10,7 @@ from src.models.predict import (
     predict_proba,
     predict_with_confidence,
     predict_top_k,
+    top_k_from_proba_dict,
 )
 
 
@@ -267,4 +268,27 @@ def test_predict_top_k_clamps_to_n_classes(tiny_model):
     results = predict_top_k(["any plot text"], vec_path, model_path, k=100)
     # Model has 2 classes; result should be clamped to 2
     assert len(results[0]) <= 2
+
+
+# ---------------------------------------------------------------------------
+# top_k_from_proba_dict tests
+# ---------------------------------------------------------------------------
+
+def test_top_k_from_proba_dict_returns_sorted_rows():
+    proba = {"Drama": 0.2, "Action": 0.7, "Comedy": 0.1}
+    rows = top_k_from_proba_dict(proba, k=2)
+    assert rows == [
+        {"genre": "Action", "confidence": 0.7},
+        {"genre": "Drama", "confidence": 0.2},
+    ]
+
+
+def test_top_k_from_proba_dict_k_must_be_positive():
+    with pytest.raises(ValueError, match="k must be a positive integer"):
+        top_k_from_proba_dict({"Action": 1.0}, k=0)
+
+
+def test_top_k_from_proba_dict_clamps_when_k_exceeds_classes():
+    rows = top_k_from_proba_dict({"Action": 0.6, "Drama": 0.4}, k=10)
+    assert len(rows) == 2
 
