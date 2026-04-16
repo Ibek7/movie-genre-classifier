@@ -7,6 +7,7 @@ from src.preprocessing.cleaner import (
     clean_and_save,
     word_count,
     average_word_length,
+    strip_numeric_tokens,
     sentence_count,
     truncate_plot,
     filter_short_plots,
@@ -176,6 +177,30 @@ def test_average_word_length_empty_string():
 
 def test_average_word_length_none_input():
     assert average_word_length(None) == 0.0
+
+
+# ---------------------------------------------------------------------------
+# strip_numeric_tokens tests
+# ---------------------------------------------------------------------------
+
+def test_strip_numeric_tokens_removes_year_references():
+    assert strip_numeric_tokens("in 1995 a hero fights") == "in a hero fights"
+
+
+def test_strip_numeric_tokens_leaves_alphanumeric_intact():
+    assert strip_numeric_tokens("episode1 season2") == "episode1 season2"
+
+
+def test_strip_numeric_tokens_empty_string_returns_empty():
+    assert strip_numeric_tokens("") == ""
+
+
+def test_strip_numeric_tokens_none_returns_empty():
+    assert strip_numeric_tokens(None) == ""
+
+
+def test_strip_numeric_tokens_all_digits_returns_empty():
+    assert strip_numeric_tokens("1 2 3 42") == ""
 
 
 # ---------------------------------------------------------------------------
