@@ -217,3 +217,27 @@ def flatten_genre_labels(values: pd.Series, sep: str = "|") -> List[str]:
     )
     labels = labels[labels != ""]
     return labels.tolist()
+
+
+def build_label_index(labels: List[str]) -> Dict[str, int]:
+    """Build a deterministic label → integer index mapping.
+
+    Labels are sorted alphabetically before indexing so the mapping is
+    consistent across different orderings of the input list.
+
+    Parameters
+    ----------
+    labels:
+        Iterable of class-label strings (duplicates are silently ignored).
+
+    Returns
+    -------
+    dict[str, int]
+        Mapping from label string to zero-based integer index.
+
+    Examples
+    --------
+    >>> build_label_index(["Drama", "Action", "Comedy"])
+    {'Action': 0, 'Comedy': 1, 'Drama': 2}
+    """
+    return {label: idx for idx, label in enumerate(sorted(set(labels)))}
