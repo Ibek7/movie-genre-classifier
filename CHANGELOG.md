@@ -27,6 +27,13 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Unit tests for `normalize_confusion_matrix_values()` in `tests/test_visualization.py`.
 - Unit tests for `top_k_from_proba_dict()` in `tests/test_predict.py`.
 - Unit tests for `flatten_genre_labels()` in `tests/test_utils.py`.
+- `strip_numeric_tokens()` in `src/preprocessing/cleaner.py` for removing all-digit tokens from plot text.
+- `build_label_index()` in `src/utils/helpers.py` for a sorted alphabetical label-to-integer mapping.
+- `format_count()` in `src/utils/helpers.py` for comma-formatted integer display (e.g. `12345` → `"12,345"`).
+- `plot_top_n_genres()` in `src/utils/visualization.py` for a horizontal bar chart of the top-N genre frequencies.
+- Unit tests for `strip_numeric_tokens()` in `tests/test_preprocessing.py`.
+- Unit tests for `build_label_index()` and `format_count()` in `tests/test_utils.py`.
+- Unit tests for `plot_top_n_genres()` in `tests/test_visualization.py`.
 
 ### Changed
 - `src/preprocessing/__init__.py` now exports tokenizer utilities and text-stat helpers.
@@ -38,6 +45,8 @@ project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `src/models/__init__.py` now exports `top_k_from_proba_dict`.
 - `src/utils/__init__.py` now also exports `flatten_genre_labels` and `normalize_confusion_matrix_values`.
 - `docs/methodology.md` now includes a section on ranking and diagnostics helpers.
+- `src/preprocessing/__init__.py` now also exports `strip_numeric_tokens`.
+- `src/utils/__init__.py` now also exports `build_label_index`, `format_count`, and `plot_top_n_genres`.
 
 ---
 
