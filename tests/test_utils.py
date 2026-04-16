@@ -14,6 +14,7 @@ from src.utils.helpers import (
     safe_divide,
     clamp_probability,
     flatten_genre_labels,
+    build_label_index,
 )
 
 
@@ -226,3 +227,22 @@ def test_flatten_genre_labels_strips_whitespace_and_drops_empty_tokens():
 def test_flatten_genre_labels_ignores_null_values():
     s = pd.Series([None, "Thriller|Crime"])
     assert flatten_genre_labels(s) == ["Thriller", "Crime"]
+
+
+# ---------------------------------------------------------------------------
+# build_label_index
+# ---------------------------------------------------------------------------
+
+def test_build_label_index_returns_sorted_mapping():
+    result = build_label_index(["Drama", "Action", "Comedy"])
+    assert result == {"Action": 0, "Comedy": 1, "Drama": 2}
+
+
+def test_build_label_index_deduplicates_labels():
+    result = build_label_index(["Action", "Drama", "Action"])
+    assert len(result) == 2
+    assert result["Action"] < result["Drama"]
+
+
+def test_build_label_index_single_label():
+    assert build_label_index(["Horror"]) == {"Horror": 0}
