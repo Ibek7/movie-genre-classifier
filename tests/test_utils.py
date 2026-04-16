@@ -15,6 +15,7 @@ from src.utils.helpers import (
     clamp_probability,
     flatten_genre_labels,
     build_label_index,
+    format_count,
 )
 
 
@@ -246,3 +247,19 @@ def test_build_label_index_deduplicates_labels():
 
 def test_build_label_index_single_label():
     assert build_label_index(["Horror"]) == {"Horror": 0}
+
+
+# ---------------------------------------------------------------------------
+# format_count
+# ---------------------------------------------------------------------------
+
+def test_format_count_adds_thousands_separator():
+    assert format_count(12345) == "12,345"
+
+
+def test_format_count_zero():
+    assert format_count(0) == "0"
+
+
+def test_format_count_large_number():
+    assert format_count(1_000_000) == "1,000,000"
