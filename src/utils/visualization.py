@@ -297,3 +297,41 @@ def plot_f1_heatmap(
         Path(save_path).parent.mkdir(parents=True, exist_ok=True)
         fig.savefig(save_path)
     return fig
+
+
+def plot_top_n_genres(
+    labels: "pd.Series",
+    top_n: int = 10,
+    title: str = "Top Genres",
+    save_path: Optional[str | Path] = None,
+) -> plt.Figure:
+    """Horizontal bar chart for the *top_n* most frequent genre labels.
+
+    Parameters
+    ----------
+    labels:
+        Series of genre strings (may include pipe-separated multi-labels;
+        only the primary label before the first ``|`` is used).
+    top_n:
+        Number of genres to display.
+    title:
+        Figure title.
+    save_path:
+        When provided the figure is saved to this path before being returned.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+    """
+    primary = pd.Series(labels).str.split("|").str[0].str.strip()
+    counts = primary.value_counts().head(top_n)
+    fig, ax = plt.subplots(figsize=(8, max(3, top_n // 2)))
+    counts.sort_values().plot(kind="barh", ax=ax, color="steelblue", edgecolor="white")
+    ax.set_title(title)
+    ax.set_xlabel("Count")
+    ax.set_ylabel("Genre")
+    fig.tight_layout()
+    if save_path is not None:
+        Path(save_path).parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(save_path)
+    return fig
