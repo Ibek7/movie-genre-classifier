@@ -95,6 +95,33 @@ def average_word_length(text: str) -> float:
     return sum(len(token) for token in tokens) / len(tokens)
 
 
+def strip_numeric_tokens(text: str) -> str:
+    """Remove purely numeric tokens from *text*.
+
+    Digits such as year references (``1995``) and chapter numbers are rarely
+    informative for genre classification and add noise to TF-IDF features.
+
+    Parameters
+    ----------
+    text:
+        Raw or pre-normalised plot string.
+
+    Returns
+    -------
+    str
+        Text with all whitespace-separated, all-digit tokens removed.
+        Non-string or empty input returns an empty string.
+
+    Examples
+    --------
+    >>> strip_numeric_tokens("in 1995 a hero saves 7 people")
+    'in a hero saves people'
+    """
+    if not text or not isinstance(text, str):
+        return ""
+    return " ".join(tok for tok in text.split() if not tok.isdigit())
+
+
 def sentence_count(text: str) -> int:
     """Return an approximate sentence count by splitting on ``.``, ``!``, ``?``.
 
