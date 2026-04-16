@@ -241,3 +241,26 @@ def build_label_index(labels: List[str]) -> Dict[str, int]:
     {'Action': 0, 'Comedy': 1, 'Drama': 2}
     """
     return {label: idx for idx, label in enumerate(sorted(set(labels)))}
+
+
+def format_count(n: int) -> str:
+    """Format an integer count with locale-style thousand separators.
+
+    Parameters
+    ----------
+    n:
+        Non-negative integer to format.
+
+    Returns
+    -------
+    str
+        Human-readable string, e.g. ``"1,234,567"``.
+
+    Examples
+    --------
+    >>> format_count(12345)
+    '12,345'
+    >>> format_count(0)
+    '0'
+    """
+    return f"{int(n):,}"
