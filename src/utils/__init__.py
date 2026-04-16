@@ -31,6 +31,8 @@ from .helpers import (
     format_accuracy,
     get_top_genres,
     flatten_genre_labels,
+    build_label_index,
+    format_count,
     compute_classification_report,
     format_duration,
     elapsed_time,
@@ -45,6 +47,7 @@ from .visualization import (
     plot_learning_curve,
     plot_f1_heatmap,
     normalize_confusion_matrix_values,
+    plot_top_n_genres,
 )
 
 __all__ = [
@@ -55,6 +58,8 @@ __all__ = [
     "format_accuracy",
     "get_top_genres",
     "flatten_genre_labels",
+    "build_label_index",
+    "format_count",
     "compute_classification_report",
     "format_duration",
     "elapsed_time",
@@ -68,4 +73,5 @@ __all__ = [
     "plot_learning_curve",
     "plot_f1_heatmap",
     "normalize_confusion_matrix_values",
+    "plot_top_n_genres",
 ]
