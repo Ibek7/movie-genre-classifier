@@ -126,6 +126,16 @@ pytest -q
 pytest -q tests/test_models.py tests/test_vectorization.py tests/test_predict.py
 ```
 
+## Makefile Shortcuts
+
+```bash
+make install    # install runtime deps + editable package
+make test       # run full test suite
+make test-fast  # run focused model/prediction tests
+make lint       # compile-check Python modules
+make clean      # remove Python cache files
+```
+
 ## Developer Helper Functions
 
 Recent utility additions for notebook and script ergonomics:
