@@ -57,6 +57,9 @@ source .venv/bin/activate        # macOS/Linux
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Optional: install developer tooling
+pip install -r requirements-dev.txt
 ```
 
 ## Quick Start
