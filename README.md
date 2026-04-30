@@ -1,6 +1,10 @@
 # Movie Genre Classifier  
 *A scalable NLP pipeline to predict movie genres from plot summaries*
 
+[![Tests](https://github.com/bekamguta/movie-genre-classifier/actions/workflows/tests.yml/badge.svg)](https://github.com/bekamguta/movie-genre-classifier/actions/workflows/tests.yml)
+[![Contributing](https://img.shields.io/badge/Contributing-Guide-blue)](CONTRIBUTING.md)
+[![Code of Conduct](https://img.shields.io/badge/Code%20of%20Conduct-Policy-lightgrey)](CODE_OF_CONDUCT.md)
+
 ## 🚀 **Latest: v2.0.0 - Production-Ready Optimization** 
 
 **Major Performance Breakthrough:** 95%+ speed improvement with production-ready accuracy!
